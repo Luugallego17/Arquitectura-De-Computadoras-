@@ -1,0 +1,30 @@
+# Ejecutables compilados (C / C++ / ensamblador)
+*.o
+*.out
+*.exe
+a.out
+overflow
+convertidor
+hola
+overflow_mensajes
+bucles_flags
+suma_arreglo
+suma_arreglo_c
+generador
+transferencia
+
+# Archivos de datos generados por los programas
+Clase_7/datos.txt
+Clase_7/datos.bin
+
+# Python
+__pycache__/
+*.pyc
+
+# Archivos temporales del editor y del sistema
+*~
+*.swp
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
