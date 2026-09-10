@@ -8,7 +8,8 @@
 | Archivo | Descripción |
 |---------|-------------|
 | [`Simulacion_ciclo_instruccion.xlsx`](Simulacion_ciclo_instruccion.xlsx) | Las tablas de la simulación (registros, memoria central, fase de búsqueda y traza por paso) y la hoja `Plan` con las etapas que faltan. Cuando tenga los botones pasa a ser `.xlsm`. |
-| [`README_juego.md`](README_juego.md) | El juego de Monopoly en Google Sheets (tarea #18): cómo funciona por dentro, cómo se juega y su relación con el ciclo de instrucción. |
+| [`Monopoly.xlsm`](Monopoly.xlsm) | El juego de Monopoly (tarea #18): tablero, dados, cartas, dinero y jugadores dentro de Excel, con las reglas programadas en macros VBA. Se abre en Excel de escritorio habilitando macros. |
+| [`README_juego.md`](README_juego.md) | La documentación del Monopoly (tarea #18): cómo funciona por dentro, cómo se juega y su relación con el ciclo de instrucción. |
 
 ## Qué se simula
 
