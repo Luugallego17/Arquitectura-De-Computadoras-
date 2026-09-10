@@ -1,35 +1,35 @@
-# Clase 9 — Juego: Monopoly en Google Sheets
+# Clase 9 — Juego: Monopoly en Excel (con macros VBA)
 
 **Fecha:** 09/09/2026
-**Tarea:** [#18 — Juego de Monopoly en Google Sheets](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/18)
+**Tarea:** [#18 — Juego de Monopoly en hoja de cálculo](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/18)
 
 ## De qué se trata
 
-Un Monopoly que corre completo dentro de una hoja de cálculo de Google Sheets: el tablero, los dados, el dinero de cada jugador y las propiedades viven en celdas, y las reglas están hechas con fórmulas. No hay que instalar nada, se abre con el enlace y se juega desde el navegador.
+Un Monopoly que corre completo dentro de una hoja de cálculo: el tablero, los dados, el dinero de cada jugador, las propiedades y las cartas viven en celdas, y las reglas están programadas en un módulo de macros VBA. Al final quedó en **Excel de escritorio** en vez de Google Sheets por la misma razón que la simulación del ciclo de instrucción: los botones y las macros funcionan al abrir el archivo, sin autorizar scripts.
 
-La base es un tablero que encontré hecho en Sheets; sobre esa base voy a documentar cómo funciona por dentro y adaptarlo para que sirva como ejemplo de la clase.
+La base es un tablero que encontré ya hecho; sobre esa base lo adapté (jugadoras: Luna, Inge, Karen y Belén) y lo documento aquí para que sirva como ejemplo de la clase.
 
-> 🔗 Enlace al juego: *(pendiente — se agrega cuando esté la copia en mi Drive con permiso de solo lectura)*
+> 📎 Archivo del juego: [`Monopoly.xlsm`](Monopoly.xlsm)
 > ✍️ Crédito del tablero original: *(pendiente)*
 
 ## Cómo funciona por dentro
 
-| Pieza del juego | Cómo está resuelta en la hoja |
-|-----------------|-------------------------------|
-| Tablero | Las 40 casillas van en una tabla con nombre, tipo (propiedad, impuesto, suerte, cárcel…), precio y renta. El dibujo del tablero son celdas con formato. |
-| Dados | Dos celdas con `RANDBETWEEN(1;6)`. Se vuelven a tirar al recalcular la hoja (o con una celda de "tirar" que cambia de valor). |
-| Posición de cada jugador | Una celda por jugador con el número de casilla; avanza con `MOD(posición + dado1 + dado2; 40)`. |
-| Dinero | Una celda de saldo por jugador; cada compra, renta o impuesto la actualiza. |
-| Propiedades | Columna "dueño" en la tabla del tablero; la renta se cobra con un `BUSCARV`/`INDEX` sobre la casilla donde cayó el jugador. |
-| Turno | Una celda que indica a quién le toca y rota con `MOD(turno; jugadores) + 1`. |
-| Qué pasó en la jugada | Una celda de mensaje que explica la acción (compraste X, pagaste renta a Y, fuiste a la cárcel). |
+El archivo tiene dos hojas y un módulo de VBA llamado `Monopoly`:
+
+| Pieza del juego | Cómo está resuelta en el archivo |
+|-----------------|----------------------------------|
+| Tablero (hoja `Board`) | Las 40 casillas clásicas (de Mediterranean Avenue a Boardwalk) dibujadas con celdas con formato, con las fichas (carrito, perro, sombrero y plancha) moviéndose encima. |
+| Datos del juego (hoja `Pieces`) | La tabla de propiedades con nombre, costo, costo de casa/hotel, renta, dueño, construcciones, hipoteca y color de grupo. Es la "memoria" del juego. |
+| Cartas | Dos tablas con los mazos de **Chance** y **Community Chest**: cada carta tiene su mensaje y su efecto en columnas (cuánto ganas o pagas, a dónde te mueves, cuánto pagas por casa/hotel). |
+| Jugadores | Una tabla por jugadora con su ficha, su dinero, su posición y su tipo: **Person** (juega una persona) o **Computer** (la macro juega sola). |
+| Turnos y reglas | El módulo VBA `Monopoly` tira los dados, mueve la ficha, aplica la casilla donde caes (comprar, pagar renta, carta, cárcel) y muestra mensajes como `Rent Owed: $8`. |
 
 ## Cómo se juega
 
-1. Hacer una copia de la hoja (Archivo → Hacer una copia) para no pisar la original.
-2. Escribir los nombres de los jugadores en las celdas azules.
-3. En cada turno, tirar los dados (cambiar la celda "tirar"), leer el mensaje de la jugada y decidir si se compra la propiedad.
-4. La hoja actualiza sola la posición, el saldo y el dueño de la casilla. Gana el último que queda con dinero.
+1. Descargar [`Monopoly.xlsm`](Monopoly.xlsm) y abrirlo en Excel de escritorio.
+2. Aceptar **"Habilitar contenido"** para que corran las macros (sin eso el tablero se ve, pero no se puede jugar).
+3. En la hoja `Pieces` poner el nombre de cada jugadora y elegir si la lleva una persona (`Person`) o la computadora (`Computer`).
+4. Jugar por turnos desde el tablero: la macro tira los dados, mueve la ficha y va actualizando dinero, propiedades y construcciones. Gana la última que queda con dinero.
 
 ## Qué tiene que ver con la clase
 
@@ -47,7 +47,7 @@ O sea, la tabla del tablero es la memoria, la posición es el contador de progra
 
 ## Pendientes
 
-- [ ] Subir la copia a Drive y poner el enlace de solo lectura arriba.
+- [x] Subir el archivo del juego al repo ([`Monopoly.xlsm`](Monopoly.xlsm)) y anexarlo a la tarea #18.
 - [ ] Anotar el crédito del tablero original.
-- [ ] Capturas de una partida de 3 turnos mostrando la tabla del tablero, los dados y el mensaje de la jugada.
+- [ ] Capturas de una partida de 3 turnos mostrando el tablero, los dados y el mensaje de la jugada.
 - [ ] Cerrar la tarea #18 y moverla a Done en el tablero.
