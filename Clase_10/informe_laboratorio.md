@@ -3,7 +3,7 @@
 **Materia:** Arquitectura de Computadoras (SIS-131)
 **Alumna:** Luna Saleth Gallego Martinez
 **Fecha:** 16/09/2026
-**Tareas:** [#23](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/23) · [#24](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/24)
+**Tarea:** [#22](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/22)
 
 ---
 
@@ -33,7 +33,7 @@ punteros por fila), **4** loop unrolling 4x, y una fase **5** adicional
 con la optimización aplicada al juego: mezclar solo los 640 × 240
 píxeles del rectángulo sin copiar el frame.
 
-## 2. Hardware (tarea #21)
+## 2. Hardware
 
 Intel Xeon @ 2.80 GHz, 4 núcleos, x86_64. L1d 32 KiB por núcleo (8 vías),
 L2 1 MiB por núcleo, L3 33 MiB compartida. Línea de caché: **64 bytes**
@@ -259,4 +259,4 @@ para la inferencia de YOLO, que es el verdadero trabajo del juego.
 
 > 🖼️ Capturas de la terminal de la laptop del proyecto (ejecución del
 > benchmark, `perf stat` y `medir_overlay.py`): en los comentarios de
-> los issues #22, #23 y #24.
+> el issue #22.
