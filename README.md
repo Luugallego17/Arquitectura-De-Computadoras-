@@ -32,7 +32,8 @@ con la explicación de lo que se hizo.
 ├── 🧠 Clase_6/   # 31/08 · Suma de un arreglo almacenado en RAM
 ├── 💾 Clase_7/   # 02/09 · Transferencia de bloques de memoria (memcpy/memmove)
 ├── ⏱️ Clase_8/   # 07/09 · Tiempo de CPU, CPI y el ciclo de instrucción
-└── 🎲 Clase_9/   # 09/09 · Simulación del ciclo de instrucción y Monopoly en hoja de cálculo
+├── 🎲 Clase_9/   # 09/09 · Simulación del ciclo de instrucción y Monopoly en hoja de cálculo
+└── 🚀 Clase_10/  # 16/09 · Optimización en la jerarquía de memoria (caché, registros e ILP)
 ```
 
 ## 💖 Contenido por clase
@@ -48,6 +49,7 @@ con la explicación de lo que se hizo.
 | [Clase_7](Clase_7/) | 02/09/2026 | Transferencia de bloques de memoria con `memcpy`/`memmove` | [#9](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/9) · [#10](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/10) · [#11](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/11) · [#12](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/12) · [#13](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/13) | 🌸 Terminado |
 | [Clase_8](Clase_8/) | 07/09/2026 | Tiempo de CPU (`T_CPU = NI × CPI × Tc`), CPI según la mezcla de instrucciones y ciclo Fetch-Decode-Execute-Write-Back | [#15](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/15) · [#16](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/16) | 🌸 Terminado |
 | [Clase_9](Clase_9/) | 09/09/2026 | Simulación de la fase de búsqueda del ciclo de instrucción y Monopoly jugable en hoja de cálculo (macros VBA) | [#18](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/18) · [#19](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/19) | 🌷 En progreso |
+| [Clase_10](Clase_10/) | 16/09/2026 | Optimización en la jerarquía de memoria: líneas de caché de 64 B, registros de CPU y loop unrolling (ILP) | [#21](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/21) · [#22](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/22) · [#23](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/23) · [#24](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/24) | 🌷 En progreso |
 
 🗝️ **Leyenda de estados:** 🌱 Pendiente · 🌷 En progreso · 🌸 Terminado
 
