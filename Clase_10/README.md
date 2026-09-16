@@ -50,8 +50,9 @@ llama "desaprovechar la transferencia".
 |---------|-------------|
 | [`verificacion_hardware.md`](verificacion_hardware.md) | Tarea #21: qué hace cada comando de verificación previa, las salidas del equipo y por qué una línea de 64 bytes guarda 16 `float` (o 64 bytes de píxel). |
 | [`verificar_hardware.sh`](verificar_hardware.sh) | Script que corre los tres comandos de la guía y calcula cuántos `float` caben en una línea de caché. |
-| [`benchmark_juego.c`](benchmark_juego.c) | Tarea #22: el benchmark en ANSI C. Reproduce `overlay_rect()` sobre un frame Full HD en las cuatro fases de la guía más una quinta con la optimización real del juego (solo la región), con tiempo, ms por frame, GB/s, speedup y checksum. |
-| [`Proyecto/Juego_VA.py`](Proyecto/Juego_VA.py) | El juego original, tal como se entregó. |
+| [`benchmark_juego.c`](benchmark_juego.c) | Tarea #22: el benchmark en ANSI C. Reproduce `overlay_rect()` sobre un frame Full HD en las cuatro fases de la guía más una quinta con la optimización real del juego (solo la región), con tiempo, ms por frame, GFLOPS, speedup y checksum. |
+| [`informe_laboratorio.md`](informe_laboratorio.md) | Tareas #23 y #24: la tabla de métricas de la guía (tiempo, GFLOPS, speedup y tasa de acierto de caché medida con `cachegrind`) y las respuestas al cuestionario de análisis crítico. |
+| [`Proyecto/Juego_VA.py`](Proyecto/Juego_VA.py) | El juego original, tal como se entregó (también está, sin comentarios, en [`../Clase_9/Juego_VA.py`](../Clase_9/Juego_VA.py)). |
 | [`Proyecto/Juego_VA_optimizado.py`](Proyecto/Juego_VA_optimizado.py) | El juego con `overlay_rect()` optimizada: mezcla solo la región del rectángulo sin copiar el frame. Es el único cambio. |
 | [`Proyecto/medir_overlay.py`](Proyecto/medir_overlay.py) | Mide en Python (numpy + OpenCV, sin cámara ni YOLO) la `overlay_rect()` original vs la optimizada y verifica que el frame resultante sea idéntico. Para correrlo en la laptop del juego. |
 | [`Proyecto/yolov8n.pt`](Proyecto/yolov8n.pt) | Pesos del modelo YOLOv8 nano que usa el juego. |
@@ -78,20 +79,20 @@ aprovecha 16 elementos por transferencia (1 fallo cada 16 lecturas,
 `overlay_rect()`: sobre un frame de 1920×1080×3 bytes (`uint8`, BGR,
 igual que OpenCV) pinta el panel de bienvenida del juego (640×240 px,
 color `(30, 0, 50)`, `alpha = 0.75`) 30 veces, como si fueran 30 frames.
-La mezcla es la misma fórmula en todas las fases, en punto fijo de 8
-bits para que el resultado sea determinístico:
+La mezcla es la misma fórmula que usa `cv2.addWeighted`, en punto
+flotante, igual en todas las fases:
 
 ```
-dst = (src · (256 − a) + overlay · a + 128) >> 8        con a = round(0.75 · 256) = 192
+dst = (unsigned char)(src · (1 − alpha) + overlay · alpha + 0.5)      → 4 FLOP por byte
 ```
 
 | Fase | Función | Qué cambia | Por qué mejora |
 |------|---------|------------|----------------|
-| 1. Naive (por columnas) | `fase1_naive` | Copia el frame, pinta el rectángulo y mezcla **todo** el frame recorriéndolo por columnas (`x` afuera, `y` adentro): cada paso salta una fila entera, **5760 bytes**. | No mejora: cada acceso cae en una línea de caché distinta; de los 64 bytes que trae el bus se usan 3 (un píxel) y el resto se desperdicia. Es el `i-j-k` de la guía. |
+| 1. Naive (por columnas) | `fase1_naive` | Copia el frame, pinta el rectángulo y mezcla **todo** el frame recorriéndolo por columnas (`x` afuera, `y` adentro): cada paso salta una fila entera, **5760 bytes**. | No mejora: cada píxel cae en una línea de caché distinta; de los 64 bytes que trae el bus se usan 3 y el resto se desperdicia. Es el `i-j-k` de la guía. |
 | 2. Localidad espacial (por filas) | `fase2_localidad_espacial` | Lo mismo, pero recorriendo por filas (`y` afuera, `x` adentro): los bytes se leen contiguos. | Cada línea de 64 bytes se usa completa: 1 fallo de caché cada 64 bytes de píxel. |
-| 3. Localidad temporal + registros | `fase3_registros_cpu` | El alpha en punto fijo (`a` y `256 − a`) se calcula **una sola vez** y se guarda en `register const int`; se usan punteros a la fila actual en vez de recalcular `y·STRIDE + x·3 + c` por byte. | Los operandos repetidos viven en registros de la CPU; el bucle interno solo lee el píxel, la capa y escribe el resultado. |
-| 4. Loop unrolling 4x + ILP | `fase4_loop_unrolling` | El bucle interno procesa 4 bytes por iteración. | Menos saltos y comparaciones por byte, y cuatro operaciones independientes que el procesador superescalar ejecuta en paralelo. |
-| 5. Solo ROI (el juego optimizado) | `fase5_roi` | Ni copia ni mezcla el frame completo: solo recorre los 640×240×3 bytes del rectángulo y mezcla con el color directamente (`color · a + 128` precalculado por canal). | Toca 27 veces menos memoria. Es lo que hace `Juego_VA_optimizado.py`. |
+| 3. Localidad temporal + registros | `fase3_registros_cpu` | `alpha` y `1 − alpha` se calculan **una sola vez** y se guardan en `register const float` (registros de la FPU); se usan punteros a la fila actual en vez de recalcular `y·STRIDE + x·3 + c` por byte. | Los operandos repetidos viven en registros; el bucle interno solo lee el píxel, la capa y escribe el resultado. |
+| 4. Loop unrolling 4x + ILP | `fase4_loop_unrolling` | El bucle interno procesa 4 bytes por iteración. | Menos saltos y comparaciones por byte, y cuatro operaciones independientes que el procesador superescalar puede ejecutar en paralelo. |
+| 5. Solo ROI (el juego optimizado) | `fase5_roi` | Ni copia ni mezcla el frame completo: solo recorre los 640×240×3 bytes del rectángulo y mezcla con el color directamente (`color · alpha + 0.5` precalculado por canal). | Toca 13.5 veces menos memoria. Es lo que hace `Juego_VA_optimizado.py`. |
 
 Las fases 1 a 4 incluyen en el tiempo la copia del frame y el pintado
 del rectángulo (el `frame.copy()` y `cv2.rectangle` del juego), porque
@@ -102,7 +103,7 @@ El programa además:
 
 - mide cada fase con `clock_gettime(CLOCK_MONOTONIC)`;
 - reporta ms por frame (lo que tarda **una** llamada a `overlay_rect`) y
-  el ancho de banda efectivo en GB/s;
+  el rendimiento en GFLOPS (`4 · bytes mezclados · frames / tiempo`);
 - calcula el **speedup** `S = T_base / T_opt` tomando la fase 1 como base;
 - valida con un **checksum** (la suma de todos los bytes del frame
   final) que las cinco fases producen exactamente la misma imagen.
@@ -117,6 +118,11 @@ bash verificar_hardware.sh
 gcc -Wall -Wextra -O1 benchmark_juego.c -o benchmark_juego -lm
 ./benchmark_juego
 
+# Parte 3 — fallos de caché (perf en la laptop; cachegrind donde no haya perf)
+perf stat -e L1-dcache-loads,L1-dcache-load-misses,cycles,instructions ./benchmark_juego
+gcc -Wall -Wextra -O1 -DFRAMES=1 benchmark_juego.c -o benchmark_juego_cg -lm
+valgrind --tool=cachegrind --cache-sim=yes --D1=32768,8,64 --LL=33554432,16,64 ./benchmark_juego_cg
+
 # Medir overlay_rect original vs optimizada en Python (necesita numpy y opencv)
 python3 Proyecto/medir_overlay.py
 
@@ -125,8 +131,8 @@ cd Proyecto && python3 Juego_VA_optimizado.py
 ```
 
 Se usa `-O1` a propósito: activa optimizaciones básicas pero **no
-reordena bucles** automáticamente como haría `-O3`, así que lo que se
-mide es el efecto real de cómo está escrito el código.
+reordena bucles ni vectoriza** como haría `-O3`, así que lo que se mide
+es el efecto real de cómo está escrito el código.
 
 ## Salidas
 
@@ -169,13 +175,13 @@ equipo de la Parte 1 (Intel Xeon @ 2.80 GHz, 4 núcleos):
 
 ```
 === RESULTADOS DETERMINISTICOS: overlay_rect sobre 1920x1080x3, 30 frames ===
-Frame: 6.2 MB | Rectangulo: 640x240 px | Linea de cache: 64 B = 64 bytes de pixel
+Frame: 6.2 MB | Rectangulo: 640x240 px | 4 FLOP por byte mezclado
 
-1. Naive (por columnas)      :  0.4329 s |   14.43 ms/frame |   0.86 GB/s | Speedup:   1.00x
-2. Localidad Espacial (filas):  0.1918 s |    6.39 ms/frame |   1.95 GB/s | Speedup:   2.26x
-3. Registros de CPU          :  0.1477 s |    4.92 ms/frame |   2.53 GB/s | Speedup:   2.93x
-4. Loop Unrolling 4x (ILP)   :  0.0983 s |    3.28 ms/frame |   3.80 GB/s | Speedup:   4.41x
-5. Solo ROI (juego optimiz.) :  0.0052 s |    0.17 ms/frame |   2.63 GB/s | Speedup:  82.50x
+1. Naive (por columnas)      :  0.4589 s |   15.30 ms/frame |   1.63 GFLOPS | Speedup:   1.00x
+2. Localidad Espacial (filas):  0.2623 s |    8.74 ms/frame |   2.85 GFLOPS | Speedup:   1.75x
+3. Registros de CPU          :  0.2556 s |    8.52 ms/frame |   2.92 GFLOPS | Speedup:   1.80x
+4. Loop Unrolling 4x (ILP)   :  0.2639 s |    8.80 ms/frame |   2.83 GFLOPS | Speedup:   1.74x
+5. Solo ROI (juego optimiz.) :  0.0113 s |    0.38 ms/frame |   4.89 GFLOPS | Speedup:  40.62x
 
 [OK] Validacion de Checksum: 7.4670e+08
      Fase 2 vs Fase 1: Error = 0.0000e+00
@@ -184,20 +190,34 @@ Frame: 6.2 MB | Rectangulo: 640x240 px | Linea de cache: 64 B = 64 bytes de pixe
      Fase 5 vs Fase 1: Error = 0.0000e+00
 ```
 
+### Parte 3 — Tabla de métricas
+
+Tasa de acierto de la caché L1 de datos medida con `cachegrind`
+(detalle y cuestionario en [`informe_laboratorio.md`](informe_laboratorio.md)):
+
+| Fase / Configuración | Tiempo Medido (s) | Rendimiento (GFLOPS) | Aceleración (Speedup) | Tasa Acierto Caché |
+|----------------------|-------------------|----------------------|-----------------------|--------------------|
+| 1. Naive (por columnas) | 0.4589 s | 1.63 GFLOPS | 1.00x (Base) | Baja: 65.6 % |
+| 2. Localidad Espacial (por filas) | 0.2623 s | 2.85 GFLOPS | 1.75x | Alta: 98.4 % |
+| 3. Uso de Registros CPU | 0.2556 s | 2.92 GFLOPS | 1.80x | Óptima: 98.4 % |
+| 4. Loop Unrolling 4x (ILP) | 0.2639 s | 2.83 GFLOPS | 1.74x | Máxima: 98.4 % |
+| 5. Solo ROI (optimización del juego) | 0.0113 s | 4.89 GFLOPS | 40.62x | 98.4 % |
+
 Lo que se ve:
 
 - Recorrer el frame por filas en vez de por columnas (fase 2) hace el
-  mismo trabajo **2.3 veces más rápido** sin cambiar ni una operación:
-  es la línea de caché de 64 bytes de la Parte 1 usándose completa en
-  vez de desperdiciar 61 de sus 64 bytes en cada acceso.
-- Sacar el cálculo del alpha y las direcciones a registros (fase 3) suma
-  otro 1.3x, y el unrolling (fase 4) otro 1.5x: en total **4.4x** sobre
-  la versión naive, todavía tocando los 6.2 MB completos.
+  mismo trabajo **1.75 veces más rápido** con las mismas 103.7 M de
+  instrucciones: los fallos de caché bajan de 4.28 M a 0.19 M (22 veces
+  menos). Es la línea de 64 bytes de la Parte 1 usándose completa.
+- Las fases 3 y 4 reducen las instrucciones ejecutadas (−10 % y −22 %)
+  pero no el tiempo: una vez arreglada la localidad el bucle espera a
+  la FPU (conversión entero → float, mezcla y float → entero por cada
+  byte), y con `-O1` ni registros ni unrolling acortan esa cadena.
 - La fase 5 es la lección grande para el proyecto: la memoria más rápida
-  es la que **no se toca**. Mezclar solo el rectángulo tarda 0.17 ms en
-  vez de 14.43 ms (**82.5x**). Con 6–8 paneles por frame, la versión
-  original gasta unos 40–100 ms de puro `overlay_rect` por frame en la
-  fase naive (menos de 25 fps solo por los paneles); la optimizada, ~1 ms.
+  es la que **no se toca**. Mezclar solo el rectángulo tarda 0.38 ms en
+  vez de 15.30 ms (**40x**). Con 6–8 paneles por frame, la versión
+  original gasta entre 50 y 120 ms por frame solo en `overlay_rect`; la
+  optimizada, 2–3 ms.
 - El **error del checksum es 0** en las cinco fases: la imagen final es
   idéntica. Se optimizó el tiempo, no el resultado.
 
@@ -224,9 +244,4 @@ def overlay_rect(frame, x1, y1, x2, y2, color, alpha=0.45):
 `Proyecto/medir_overlay.py` corre las dos versiones sobre el mismo frame
 sintético que usa el benchmark en C y comprueba con `np.array_equal`
 que el resultado es idéntico píxel a píxel. Necesita `numpy` y
-`opencv-python`, que no están en el entorno donde se compiló el
-benchmark, así que su medición se hace en la laptop del proyecto
-(tarea #23).
-
-El análisis de fallos de caché con `perf`/`cachegrind` y la tabla de
-métricas completa quedan para la tarea #23.
+`opencv-python`, así que su medición se hace en la laptop del proyecto.
