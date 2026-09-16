@@ -5,8 +5,6 @@
 
 - [#21 — Verificación del hardware: jerarquía de caché y línea de 64 bytes (`lscpu`, `getconf`, sysfs)](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/21)
 - [#22 — Benchmark en ANSI C del juego con YOLO: `overlay_rect` sobre un frame Full HD con 4 fases de optimización](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/22)
-- [#23 — Ejecución del benchmark del juego y análisis de fallos de caché con `perf`](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/23)
-- [#24 — Informe del laboratorio: cuestionario de análisis crítico y entrega](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/24)
 
 Guía de laboratorio: *Optimización en la Jerarquía de Memoria — Análisis
 empírico de líneas de caché (64 B), registros de CPU y paralelismo ILP
@@ -51,7 +49,7 @@ llama "desaprovechar la transferencia".
 | [`verificacion_hardware.md`](verificacion_hardware.md) | Tarea #21: qué hace cada comando de verificación previa, las salidas del equipo y por qué una línea de 64 bytes guarda 16 `float` (o 64 bytes de píxel). |
 | [`verificar_hardware.sh`](verificar_hardware.sh) | Script que corre los tres comandos de la guía y calcula cuántos `float` caben en una línea de caché. |
 | [`benchmark_juego.c`](benchmark_juego.c) | Tarea #22: el benchmark en ANSI C. Reproduce `overlay_rect()` sobre un frame Full HD en las cuatro fases de la guía más una quinta con la optimización real del juego (solo la región), con tiempo, ms por frame, GFLOPS, speedup y checksum. |
-| [`informe_laboratorio.md`](informe_laboratorio.md) | Tareas #23 y #24: la tabla de métricas de la guía (tiempo, GFLOPS, speedup y tasa de acierto de caché medida con `cachegrind`) y las respuestas al cuestionario de análisis crítico. |
+| [`informe_laboratorio.md`](informe_laboratorio.md) | Tarea #22: la tabla de métricas de la guía (tiempo, GFLOPS, speedup y tasa de acierto de caché medida con `cachegrind`) y las respuestas al cuestionario de análisis crítico. |
 | [`Proyecto/Juego_VA.py`](Proyecto/Juego_VA.py) | El juego original, tal como se entregó (también está, sin comentarios, en [`../Clase_9/Juego_VA.py`](../Clase_9/Juego_VA.py)). |
 | [`Proyecto/Juego_VA_optimizado.py`](Proyecto/Juego_VA_optimizado.py) | El juego con `overlay_rect()` optimizada: mezcla solo la región del rectángulo sin copiar el frame. Es el único cambio. |
 | [`Proyecto/medir_overlay.py`](Proyecto/medir_overlay.py) | Mide en Python (numpy + OpenCV, sin cámara ni YOLO) la `overlay_rect()` original vs la optimizada y verifica que el frame resultante sea idéntico. Para correrlo en la laptop del juego. |
@@ -118,7 +116,7 @@ bash verificar_hardware.sh
 gcc -Wall -Wextra -O1 benchmark_juego.c -o benchmark_juego -lm
 ./benchmark_juego
 
-# Parte 3 — fallos de caché (perf en la laptop; cachegrind donde no haya perf)
+# Fallos de caché (perf en la laptop; cachegrind donde no haya perf)
 perf stat -e L1-dcache-loads,L1-dcache-load-misses,cycles,instructions ./benchmark_juego
 gcc -Wall -Wextra -O1 -DFRAMES=1 benchmark_juego.c -o benchmark_juego_cg -lm
 valgrind --tool=cachegrind --cache-sim=yes --D1=32768,8,64 --LL=33554432,16,64 ./benchmark_juego_cg
@@ -190,7 +188,7 @@ Frame: 6.2 MB | Rectangulo: 640x240 px | 4 FLOP por byte mezclado
      Fase 5 vs Fase 1: Error = 0.0000e+00
 ```
 
-### Parte 3 — Tabla de métricas
+### Tabla de métricas
 
 Tasa de acierto de la caché L1 de datos medida con `cachegrind`
 (detalle y cuestionario en [`informe_laboratorio.md`](informe_laboratorio.md)):
