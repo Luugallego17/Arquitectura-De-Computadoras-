@@ -1,0 +1,19 @@
+$ gcc -Wall -Wextra -O1 benchmark_juego.c -o benchmark_juego -lm
+(compilado sin advertencias)
+
+$ ./benchmark_juego
+
+=== RESULTADOS DETERMINISTICOS: overlay_rect sobre 1920x1080x3, 30 frames ===
+Frame: 6.2 MB | Rectangulo: 640x240 px | 4 FLOP por byte mezclado
+
+1. Naive (por columnas)      :  0.5548 s |   18.49 ms/frame |   1.35 GFLOPS | Speedup:   1.00x
+2. Localidad Espacial (filas):  0.2813 s |    9.38 ms/frame |   2.65 GFLOPS | Speedup:   1.97x
+3. Registros de CPU          :  0.2764 s |    9.21 ms/frame |   2.70 GFLOPS | Speedup:   2.01x
+4. Loop Unrolling 4x (ILP)   :  0.2834 s |    9.45 ms/frame |   2.63 GFLOPS | Speedup:   1.96x
+5. Solo ROI (juego optimiz.) :  0.0112 s |    0.37 ms/frame |   4.96 GFLOPS | Speedup:  49.74x
+
+[OK] Validacion de Checksum: 7.4670e+08
+     Fase 2 vs Fase 1: Error = 0.0000e+00
+     Fase 3 vs Fase 1: Error = 0.0000e+00
+     Fase 4 vs Fase 1: Error = 0.0000e+00
+     Fase 5 vs Fase 1: Error = 0.0000e+00

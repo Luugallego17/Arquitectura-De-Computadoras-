@@ -5,6 +5,8 @@
 
 - [#21 — Verificación del hardware: jerarquía de caché y línea de 64 bytes (`lscpu`, `getconf`, sysfs)](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/21)
 - [#22 — Benchmark en ANSI C del juego con YOLO: `overlay_rect` sobre un frame Full HD con 4 fases de optimización](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/22)
+- [#23 — Ejecución del benchmark del juego y análisis de fallos de caché con `perf`/`cachegrind`](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/23)
+- [#24 — Informe del laboratorio: cuestionario de análisis crítico y entrega](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/24)
 
 Guía de laboratorio: *Optimización en la Jerarquía de Memoria — Análisis
 empírico de líneas de caché (64 B), registros de CPU y paralelismo ILP
@@ -49,7 +51,8 @@ llama "desaprovechar la transferencia".
 | [`verificacion_hardware.md`](verificacion_hardware.md) | Tarea #21: qué hace cada comando de verificación previa, las salidas del equipo y por qué una línea de 64 bytes guarda 16 `float` (o 64 bytes de píxel). |
 | [`verificar_hardware.sh`](verificar_hardware.sh) | Script que corre los tres comandos de la guía y calcula cuántos `float` caben en una línea de caché. |
 | [`benchmark_juego.c`](benchmark_juego.c) | Tarea #22: el benchmark en ANSI C. Reproduce `overlay_rect()` sobre un frame Full HD en las cuatro fases de la guía más una quinta con la optimización real del juego (solo la región), con tiempo, ms por frame, GFLOPS, speedup y checksum. |
-| [`informe_laboratorio.md`](informe_laboratorio.md) | Tarea #22: la tabla de métricas de la guía (tiempo, GFLOPS, speedup y tasa de acierto de caché medida con `cachegrind`) y las respuestas al cuestionario de análisis crítico. |
+| [`informe_laboratorio.md`](informe_laboratorio.md) | Tareas #23 y #24: la tabla de métricas de la guía (tiempo, GFLOPS, speedup y tasa de acierto de caché medida con `cachegrind`) y las respuestas al cuestionario de análisis crítico. |
+| [`capturas/`](capturas/) | Tarea #23: capturas de la terminal de esta corrida — verificación del hardware, compilación y ejecución del benchmark, y simulación de caché con `cachegrind` (resumen global y desglose por función). |
 | [`Proyecto/Juego_VA.py`](Proyecto/Juego_VA.py) | El juego original, tal como se entregó (también está, sin comentarios, en [`../Clase_9/Juego_VA.py`](../Clase_9/Juego_VA.py)). |
 | [`Proyecto/Juego_VA_optimizado.py`](Proyecto/Juego_VA_optimizado.py) | El juego con `overlay_rect()` optimizada: mezcla solo la región del rectángulo sin copiar el frame. Es el único cambio. |
 | [`Proyecto/medir_overlay.py`](Proyecto/medir_overlay.py) | Mide en Python (numpy + OpenCV, sin cámara ni YOLO) la `overlay_rect()` original vs la optimizada y verifica que el frame resultante sea idéntico. Para correrlo en la laptop del juego. |
@@ -175,11 +178,11 @@ equipo de la Parte 1 (Intel Xeon @ 2.80 GHz, 4 núcleos):
 === RESULTADOS DETERMINISTICOS: overlay_rect sobre 1920x1080x3, 30 frames ===
 Frame: 6.2 MB | Rectangulo: 640x240 px | 4 FLOP por byte mezclado
 
-1. Naive (por columnas)      :  0.4589 s |   15.30 ms/frame |   1.63 GFLOPS | Speedup:   1.00x
-2. Localidad Espacial (filas):  0.2623 s |    8.74 ms/frame |   2.85 GFLOPS | Speedup:   1.75x
-3. Registros de CPU          :  0.2556 s |    8.52 ms/frame |   2.92 GFLOPS | Speedup:   1.80x
-4. Loop Unrolling 4x (ILP)   :  0.2639 s |    8.80 ms/frame |   2.83 GFLOPS | Speedup:   1.74x
-5. Solo ROI (juego optimiz.) :  0.0113 s |    0.38 ms/frame |   4.89 GFLOPS | Speedup:  40.62x
+1. Naive (por columnas)      :  0.5548 s |   18.49 ms/frame |   1.35 GFLOPS | Speedup:   1.00x
+2. Localidad Espacial (filas):  0.2813 s |    9.38 ms/frame |   2.65 GFLOPS | Speedup:   1.97x
+3. Registros de CPU          :  0.2764 s |    9.21 ms/frame |   2.70 GFLOPS | Speedup:   2.01x
+4. Loop Unrolling 4x (ILP)   :  0.2834 s |    9.45 ms/frame |   2.63 GFLOPS | Speedup:   1.96x
+5. Solo ROI (juego optimiz.) :  0.0112 s |    0.37 ms/frame |   4.96 GFLOPS | Speedup:  49.74x
 
 [OK] Validacion de Checksum: 7.4670e+08
      Fase 2 vs Fase 1: Error = 0.0000e+00
@@ -195,16 +198,16 @@ Tasa de acierto de la caché L1 de datos medida con `cachegrind`
 
 | Fase / Configuración | Tiempo Medido (s) | Rendimiento (GFLOPS) | Aceleración (Speedup) | Tasa Acierto Caché |
 |----------------------|-------------------|----------------------|-----------------------|--------------------|
-| 1. Naive (por columnas) | 0.4589 s | 1.63 GFLOPS | 1.00x (Base) | Baja: 65.6 % |
-| 2. Localidad Espacial (por filas) | 0.2623 s | 2.85 GFLOPS | 1.75x | Alta: 98.4 % |
-| 3. Uso de Registros CPU | 0.2556 s | 2.92 GFLOPS | 1.80x | Óptima: 98.4 % |
-| 4. Loop Unrolling 4x (ILP) | 0.2639 s | 2.83 GFLOPS | 1.74x | Máxima: 98.4 % |
-| 5. Solo ROI (optimización del juego) | 0.0113 s | 4.89 GFLOPS | 40.62x | 98.4 % |
+| 1. Naive (por columnas) | 0.5548 s | 1.35 GFLOPS | 1.00x (Base) | Baja: 65.6 % |
+| 2. Localidad Espacial (por filas) | 0.2813 s | 2.65 GFLOPS | 1.97x | Alta: 98.4 % |
+| 3. Uso de Registros CPU | 0.2764 s | 2.70 GFLOPS | 2.01x | Óptima: 98.4 % |
+| 4. Loop Unrolling 4x (ILP) | 0.2834 s | 2.63 GFLOPS | 1.96x | Máxima: 98.4 % |
+| 5. Solo ROI (optimización del juego) | 0.0112 s | 4.96 GFLOPS | 49.74x | 98.4 % |
 
 Lo que se ve:
 
 - Recorrer el frame por filas en vez de por columnas (fase 2) hace el
-  mismo trabajo **1.75 veces más rápido** con las mismas 103.7 M de
+  mismo trabajo **casi 2 veces más rápido** con las mismas 103.7 M de
   instrucciones: los fallos de caché bajan de 4.28 M a 0.19 M (22 veces
   menos). Es la línea de 64 bytes de la Parte 1 usándose completa.
 - Las fases 3 y 4 reducen las instrucciones ejecutadas (−10 % y −22 %)
@@ -212,9 +215,9 @@ Lo que se ve:
   la FPU (conversión entero → float, mezcla y float → entero por cada
   byte), y con `-O1` ni registros ni unrolling acortan esa cadena.
 - La fase 5 es la lección grande para el proyecto: la memoria más rápida
-  es la que **no se toca**. Mezclar solo el rectángulo tarda 0.38 ms en
-  vez de 15.30 ms (**40x**). Con 6–8 paneles por frame, la versión
-  original gasta entre 50 y 120 ms por frame solo en `overlay_rect`; la
+  es la que **no se toca**. Mezclar solo el rectángulo tarda 0.37 ms en
+  vez de 18.49 ms (**≈50x**). Con 6–8 paneles por frame, la versión
+  original gasta entre 110 y 150 ms por frame solo en `overlay_rect`; la
   optimizada, 2–3 ms.
 - El **error del checksum es 0** en las cinco fases: la imagen final es
   idéntica. Se optimizó el tiempo, no el resultado.

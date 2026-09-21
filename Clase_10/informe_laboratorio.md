@@ -42,6 +42,9 @@ Detalle en [`verificacion_hardware.md`](verificacion_hardware.md).
 
 ## 3. Ejecución
 
+Captura completa de la terminal en
+[`capturas/02_benchmark_juego.txt`](capturas/02_benchmark_juego.txt):
+
 ```
 $ gcc -Wall -Wextra -O1 benchmark_juego.c -o benchmark_juego -lm
 $ ./benchmark_juego
@@ -49,11 +52,11 @@ $ ./benchmark_juego
 === RESULTADOS DETERMINISTICOS: overlay_rect sobre 1920x1080x3, 30 frames ===
 Frame: 6.2 MB | Rectangulo: 640x240 px | 4 FLOP por byte mezclado
 
-1. Naive (por columnas)      :  0.4589 s |   15.30 ms/frame |   1.63 GFLOPS | Speedup:   1.00x
-2. Localidad Espacial (filas):  0.2623 s |    8.74 ms/frame |   2.85 GFLOPS | Speedup:   1.75x
-3. Registros de CPU          :  0.2556 s |    8.52 ms/frame |   2.92 GFLOPS | Speedup:   1.80x
-4. Loop Unrolling 4x (ILP)   :  0.2639 s |    8.80 ms/frame |   2.83 GFLOPS | Speedup:   1.74x
-5. Solo ROI (juego optimiz.) :  0.0113 s |    0.38 ms/frame |   4.89 GFLOPS | Speedup:  40.62x
+1. Naive (por columnas)      :  0.5548 s |   18.49 ms/frame |   1.35 GFLOPS | Speedup:   1.00x
+2. Localidad Espacial (filas):  0.2813 s |    9.38 ms/frame |   2.65 GFLOPS | Speedup:   1.97x
+3. Registros de CPU          :  0.2764 s |    9.21 ms/frame |   2.70 GFLOPS | Speedup:   2.01x
+4. Loop Unrolling 4x (ILP)   :  0.2834 s |    9.45 ms/frame |   2.63 GFLOPS | Speedup:   1.96x
+5. Solo ROI (juego optimiz.) :  0.0112 s |    0.37 ms/frame |   4.96 GFLOPS | Speedup:  49.74x
 
 [OK] Validacion de Checksum: 7.4670e+08
      Fase 2 vs Fase 1: Error = 0.0000e+00
@@ -62,9 +65,12 @@ Frame: 6.2 MB | Rectangulo: 640x240 px | 4 FLOP por byte mezclado
      Fase 5 vs Fase 1: Error = 0.0000e+00
 ```
 
-Compila sin advertencias. Una segunda corrida dio 0.4693 / 0.2575 /
-0.2675 / 0.2668 / 0.0138 s: las fases 2, 3 y 4 están dentro del ruido
-de medición entre sí.
+Compila sin advertencias. El tiempo tiene ruido de medición: en cinco
+corridas la fase 1 osciló entre 0.50 y 0.56 s y el speedup de la fase 2
+entre 1.8x y 2.1x, mientras que las fases 2, 3 y 4 quedaron siempre
+dentro del ruido entre sí y la fase 5 entre 45x y 53x. El **checksum
+(7.4670 × 10⁸) y el error 0 en las cuatro fases son idénticos en todas
+las corridas**: la parte determinística es el resultado, no el reloj.
 
 ## 4. Fallos de caché
 
@@ -72,7 +78,8 @@ La guía pide `perf stat`. En el equipo donde se corrió el benchmark
 `perf` no está disponible, así que la tasa de aciertos se midió con el
 simulador de caché de Valgrind, configurado con la L1d real del equipo
 (32 KiB, 8 vías, líneas de 64 bytes) y un solo frame por fase para que
-la simulación termine en un tiempo razonable:
+la simulación termine en un tiempo razonable. Captura completa en
+[`capturas/03_cachegrind.txt`](capturas/03_cachegrind.txt):
 
 ```
 $ gcc -Wall -Wextra -O1 -DFRAMES=1 benchmark_juego.c -o benchmark_juego_cg -lm
@@ -82,26 +89,25 @@ $ cg_annotate cg.out
 ```
 
 Resultado por función (`Ir` = instrucciones, `Dr` = lecturas de datos,
-`D1mr` = fallos de lectura en L1d, `Dw` = escrituras, `D1mw` = fallos de
-escritura):
+`D1mr` = fallos de lectura en L1d, `Dw` = escrituras):
 
 ```
-Ir           Dr           D1mr        Dw          D1mw   función
-103,689,616  12,441,606   4,276,802   6,220,803   0      fase1_naive
-103,685,416  12,441,606     194,404   6,220,803   0      fase2_localidad_espacial
- 93,317,416  12,441,606     194,404   6,220,803   0      fase3_registros_cpu
- 80,877,978  12,441,606     194,404   6,220,803   0      fase4_loop_unrolling
-  3,687,369     460,805       7,442     460,800   0      fase5_roi
+Ir           Dr           D1mr        Dw          función
+103,689,616  12,441,606   4,276,803   6,220,803   fase1_naive
+103,685,416  12,441,606     194,405   6,220,803   fase2_localidad_espacial
+ 93,317,416  12,441,606     194,405   6,220,803   fase3_registros_cpu
+ 80,877,978  12,441,606     194,405   6,220,803   fase4_loop_unrolling
+  3,687,369     460,805       7,442     460,800   fase5_roi
 ```
 
 Tasa de acierto de la caché L1 de datos en las lecturas = 1 − D1mr / Dr:
 
 | Fase | Fallos / lecturas | Tasa de acierto | Instrucciones por byte |
 |------|-------------------|-----------------|------------------------|
-| 1. Naive (por columnas) | 4 276 802 / 12 441 606 | **65.6 %** | 16.7 |
-| 2. Localidad espacial (por filas) | 194 404 / 12 441 606 | **98.4 %** | 16.7 |
-| 3. Registros de CPU | 194 404 / 12 441 606 | **98.4 %** | 15.0 |
-| 4. Loop unrolling 4x | 194 404 / 12 441 606 | **98.4 %** | 13.0 |
+| 1. Naive (por columnas) | 4 276 803 / 12 441 606 | **65.6 %** | 16.7 |
+| 2. Localidad espacial (por filas) | 194 405 / 12 441 606 | **98.4 %** | 16.7 |
+| 3. Registros de CPU | 194 405 / 12 441 606 | **98.4 %** | 15.0 |
+| 4. Loop unrolling 4x | 194 405 / 12 441 606 | **98.4 %** | 13.0 |
 | 5. Solo ROI | 7 442 / 460 805 | **98.4 %** | 8.0 |
 
 En la laptop del proyecto el mismo dato se obtiene con:
@@ -114,15 +120,15 @@ $ perf stat -e L1-dcache-loads,L1-dcache-load-misses,cycles,instructions ./bench
 
 | Fase / Configuración | Tiempo Medido (s) | Rendimiento (GFLOPS) | Aceleración (Speedup) | Tasa Acierto Caché |
 |----------------------|-------------------|----------------------|-----------------------|--------------------|
-| 1. Naive (por columnas) | 0.4589 s | 1.63 GFLOPS | 1.00x (Base) | Baja: 65.6 % |
-| 2. Localidad Espacial (por filas) | 0.2623 s | 2.85 GFLOPS | 1.75x | Alta: 98.4 % |
-| 3. Uso de Registros CPU | 0.2556 s | 2.92 GFLOPS | 1.80x | Óptima: 98.4 % |
-| 4. Loop Unrolling 4x (ILP) | 0.2639 s | 2.83 GFLOPS | 1.74x | Máxima: 98.4 % |
-| 5. Solo ROI (optimización del juego) | 0.0113 s | 4.89 GFLOPS | 40.62x | 98.4 % |
+| 1. Naive (por columnas) | 0.5548 s | 1.35 GFLOPS | 1.00x (Base) | Baja: 65.6 % |
+| 2. Localidad Espacial (por filas) | 0.2813 s | 2.65 GFLOPS | 1.97x | Alta: 98.4 % |
+| 3. Uso de Registros CPU | 0.2764 s | 2.70 GFLOPS | 2.01x | Óptima: 98.4 % |
+| 4. Loop Unrolling 4x (ILP) | 0.2834 s | 2.63 GFLOPS | 1.96x | Máxima: 98.4 % |
+| 5. Solo ROI (optimización del juego) | 0.0112 s | 4.96 GFLOPS | 49.74x | 98.4 % |
 
 Lectura de la tabla:
 
-- El salto grande entre las fases 1 y 2 (1.75x) es solo por el orden de
+- El salto grande entre las fases 1 y 2 (≈2x) es solo por el orden de
   recorrido: mismas instrucciones (103.7 M en las dos), mismas
   operaciones, pero 22 veces menos fallos de caché.
 - Las fases 3 y 4 reducen las instrucciones (−10 % y −22 %) pero no el
@@ -130,7 +136,7 @@ Lectura de la tabla:
   memoria sino a la FPU, que por cada byte convierte entero → float,
   multiplica, suma y convierte float → entero. Con `-O1` esa cadena no
   se acorta ni con registros ni con unrolling (ver preguntas 2 y 3).
-- La fase 5 es la que importa para el juego: 40x, porque toca 13.5
+- La fase 5 es la que importa para el juego: ≈50x, porque toca 13.5
   veces menos memoria (0.46 MB del rectángulo contra 6.2 MB del frame
   más otros 6.2 MB de la copia).
 - La tasa "baja" de la fase 1 es 65.6 % y no "< 15 %" como en la guía
@@ -164,7 +170,7 @@ Hit Rate = (64/1 − 1) / (64/1) = 63 / 64 = 98.44 %
 ```
 
 La medición de `cachegrind` en la fase 2 lo confirma con exactitud:
-12 441 606 lecturas / 64 = 194 400 líneas, y se midieron 194 404 fallos
+12 441 606 lecturas / 64 = 194 400 líneas, y se midieron 194 405 fallos
 (1.56 % de fallos, 98.4 % de aciertos). En la fase 1, al saltar de fila
 en fila, cada píxel cae en una línea nueva: de los 64 bytes que trae el
 bus se usan 3 y se desperdician 61 (95 %).
@@ -185,7 +191,7 @@ con las cargas de los píxeles por el ancho de banda de L1. En el
 benchmark, la fase 3 baja las instrucciones de 103.7 M a 93.3 M (−10 %)
 porque también deja de recalcular la dirección `y·STRIDE + x·3 + c`
 por byte: los punteros a la fila viven en registros. El tiempo casi no
-cambia (8.74 → 8.52 ms) porque `-O1` ya aplica *loop-invariant code
+cambia (9.38 → 9.21 ms) porque `-O1` ya aplica *loop-invariant code
 motion*: el compilador había sacado `alpha` a un registro solo, y
 `register` hace explícito lo que ya pasaba. Igual que en el producto de
 matrices de la guía, la ventaja física existe; lo que muestra la medida
@@ -206,7 +212,7 @@ tenerlas en vuelo a la vez en distintos pipelines (paralelismo a nivel
 de instrucción) y el predictor de saltos tiene 4 veces menos saltos que
 acertar. En el benchmark se ve en las instrucciones ejecutadas: de
 103.7 M (fase 2) a 80.9 M (fase 4), −22 %, con las mismas 4 FLOP por
-byte. El tiempo, sin embargo, no bajó (8.74 → 8.80 ms). La razón es
+byte. El tiempo, sin embargo, no bajó (9.38 → 9.45 ms). La razón es
 que el bucle de la mezcla está limitado por la **latencia de la FPU**,
 no por la cantidad de instrucciones: cada byte pasa por
 `cvtsi2ss` (entero → float), dos `mulss`, dos `addss` y `cvttss2si`
@@ -251,12 +257,15 @@ hace la misma comprobación píxel a píxel en Python.
 
 El principio que más rinde en el juego no es una técnica de bucles
 sino no tocar memoria que no hace falta: mezclar solo el rectángulo da
-40x frente a 1.75x de arreglar la localidad. Con 6–8 paneles por frame,
-la versión original gasta entre 50 y 120 ms por frame solo en
-`overlay_rect` (recorrido naive) o 50–70 ms (recorrido por filas, que
+≈50x frente a ≈2x de arreglar la localidad. Con 6–8 paneles por frame,
+la versión original gasta entre 110 y 150 ms por frame solo en
+`overlay_rect` (recorrido naive) o 55–75 ms (recorrido por filas, que
 es lo que hace OpenCV); la optimizada, 2–3 ms. Eso libera tiempo de CPU
 para la inferencia de YOLO, que es el verdadero trabajo del juego.
 
-> 🖼️ Capturas de la terminal de la laptop del proyecto (ejecución del
-> benchmark, `perf stat` y `medir_overlay.py`): en los comentarios de
-> el issue #22.
+> 🖼️ Capturas de la terminal de esta corrida (verificación del
+> hardware, compilación y ejecución del benchmark, y simulación de
+> caché con `cachegrind`) en la carpeta
+> [`capturas/`](capturas/). En la laptop del proyecto se agregan las de
+> `perf stat` y `Proyecto/medir_overlay.py` (necesitan la CPU con `perf`
+> y el entorno con `numpy`/`opencv`).

@@ -1,0 +1,29 @@
+$ bash verificar_hardware.sh
+
+=== 1. Jerarquía y tamaños de memoria caché L1, L2 y L3 ===
+$ lscpu | grep -E "L1|L2|L3|Model name"
+Model name:                              Intel(R) Xeon(R) Processor @ 2.80GHz
+L1d cache:                               128 KiB (4 instances)
+L1i cache:                               128 KiB (4 instances)
+L2 cache:                                4 MiB (4 instances)
+L3 cache:                                33 MiB (1 instance)
+Vulnerability L1tf:                      Not affected
+
+=== 2. Tamaño de la línea de caché de datos L1 (getconf) ===
+$ getconf LEVEL1_DCACHE_LINESIZE
+64
+
+=== 3. Tamaño del bloque de coherencia según el sysfs del kernel ===
+$ cat /sys/devices/system/cpu/cpu0/cache/index0/coherency_line_size
+64
+
+=== Detalle de cada nivel de caché del cpu0 (sysfs) ===
+index0: L1 Data        tamaño=32K     línea=64 bytes
+index1: L1 Instruction tamaño=32K     línea=64 bytes
+index2: L2 Unified     tamaño=1024K   línea=64 bytes
+index3: L3 Unified     tamaño=33792K  línea=64 bytes
+
+=== Principio físico ===
+getconf y sysfs coinciden: la línea de caché mide 64 bytes.
+Un float ocupa 4 bytes, así que una línea guarda 16 float contiguos.
+Al pedir un solo float, el bus trae la línea completa: 1 fallo de caché por cada 16 lecturas.

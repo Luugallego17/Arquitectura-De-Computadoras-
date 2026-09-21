@@ -1,0 +1,36 @@
+$ gcc -Wall -Wextra -O1 -DFRAMES=1 benchmark_juego.c -o benchmark_juego_cg -lm
+$ valgrind --tool=cachegrind --cache-sim=yes --I1=32768,8,64 --D1=32768,8,64 \
+           --LL=33554432,16,64 --cachegrind-out-file=cg.out ./benchmark_juego_cg
+$ cg_annotate cg.out
+
+--- Resumen global (valgrind) ---
+I refs:        669,099,411
+I1  misses:          1,557
+LLi misses:          1,530
+I1  miss rate:        0.00%
+LLi miss rate:        0.00%
+
+D refs:        118,315,692  (83,138,720 rd   + 35,176,972 wr)
+D1  misses:      7,232,039  ( 6,229,817 rd   +  1,002,222 wr)
+LLd misses:        293,132  (     1,150 rd   +    291,982 wr)
+D1  miss rate:         6.1% (       7.5%     +        2.8%  )
+LLd miss rate:         0.2% (       0.0%     +        0.8%  )
+
+LL refs:         7,233,596  ( 6,231,374 rd   +  1,002,222 wr)
+LL misses:         294,662  (     2,680 rd   +    291,982 wr)
+LL miss rate:          0.0% (       0.0%     +        0.8%  )
+
+--- Desglose por funcion:  Ir | Dr | D1mr | Dw ---
+  103,689,616 (15.5%)          3 (0.2%)        3 (0.2%)       12,441,606 (15.0%)        4,276,803 (68.7%)         1 (0.1%)        6,220,803 (17.7%)              0                       0                   fase1_naive
+  103,685,416 (15.5%)          2 (0.1%)        2 (0.1%)       12,441,606 (15.0%)          194,405  (3.1%)         0               6,220,803 (17.7%)              0                       0                   fase2_localidad_espacial
+   93,317,416 (13.9%)          2 (0.1%)        2 (0.1%)       12,441,606 (15.0%)          194,405  (3.1%)         0               6,220,803 (17.7%)              0                       0                   fase3_registros_cpu
+   80,877,978 (12.1%)          4 (0.3%)        4 (0.3%)       12,441,606 (15.0%)          194,405  (3.1%)         0               6,220,803 (17.7%)              0                       0                   fase4_loop_unrolling
+    3,690,280  (0.6%)          0               0                       8  (0.0%)                4  (0.0%)         0               1,843,208  (5.2%)         29,760  (3.0%)               0                   copiar_y_pintar_rectangulo
+    3,687,369  (0.6%)          1 (0.1%)        1 (0.1%)          460,805  (0.6%)            7,442  (0.1%)         0                 460,800  (1.3%)              0                       0                   fase5_roi
+
+Tasa de acierto L1d en lecturas = 1 - D1mr/Dr:
+  fase1_naive              : 1 - 4,276,803/12,441,606 = 65.6 %
+  fase2_localidad_espacial : 1 -   194,405/12,441,606 = 98.4 %
+  fase3_registros_cpu      : 1 -   194,405/12,441,606 = 98.4 %
+  fase4_loop_unrolling     : 1 -   194,405/12,441,606 = 98.4 %
+  fase5_roi                : 1 -     7,442/   460,805 = 98.4 %
