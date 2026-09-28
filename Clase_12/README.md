@@ -1,7 +1,12 @@
 # Clase 12 — Control de afinidad de CPU en C/C++
 
 **Fecha:** 23/09/2026
-**Tarea:** Práctica de la diapositiva *Control de Afinidad de CPU en C/C++*:
+**Tareas:**
+
+- [#29 — Control de afinidad de CPU en C: un hilo por núcleo elegido al ~100 %](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/29)
+- [#30 — Verificación con el monitor de recursos y entrega del código fuente](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/30)
+
+Práctica de la diapositiva *Control de Afinidad de CPU en C/C++*:
 
 > Crear un programa que permita seleccionar núcleos específicos de la CPU
 > y elevar su procesamiento al ~100 %.

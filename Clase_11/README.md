@@ -1,7 +1,12 @@
 # Clase 11 — Memoria virtual: llenar la RAM y forzar el uso de swap
 
 **Fecha:** 21/09/2026
-**Tarea:** Práctica de la diapositiva *16. Práctica*:
+**Tareas:**
+
+- [#27 — Programa en C/Python que llena la RAM en un bucle hasta forzar el uso de swap](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/27)
+- [#28 — Evidencias del uso de swap y documentación del proceso y comandos](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/28)
+
+Práctica de la diapositiva *16. Práctica*:
 
 > Escribe un programa en C (o Python) para un sistema operativo Linux que
 > asigna bloques de memoria de manera continua en un bucle hasta llenar la
