@@ -194,9 +194,9 @@ Las capturas donde se ve la swap llenándose se toman en la laptop con
 Ubuntu siguiendo los pasos 1 a 6 de arriba, y se guardan en
 `evidencias/` (la carpeta la crea `monitorear_memoria.sh` con sus `.log`):
 
-- [ ] `free -h` y `swapon --show` antes de empezar (swap en 0).
-- [ ] La tabla de `llenar_memoria` en el momento en que aparece el aviso
+- [x] `free -h` y `swapon --show` antes de empezar (swap en 0).
+- [x] La tabla de `llenar_memoria` en el momento en que aparece el aviso
       `>>> La RAM se llenó...` y `VmSwap` empieza a crecer.
-- [ ] `free -h` / `swapon --show` con el programa en pausa (swap ocupada).
-- [ ] `htop` o `vmstat` mostrando `swpd` alto y `so` distinto de 0.
-- [ ] `evidencias/vmstat_<fecha>.log`.
+- [x] `free -h` / `swapon --show` con el programa en pausa (swap ocupada).
+- [x] `htop` o `vmstat` mostrando `swpd` alto y `so` distinto de 0.
+- [x] `evidencias/vmstat_<fecha>.log`.
