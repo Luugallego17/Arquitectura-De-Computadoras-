@@ -238,6 +238,17 @@ son *más* en la optimizada (el consumidor se duerme una vez por lote
 porque el productor no se adelanta), pero cada uno ocurre por **500
 paquetes** y no por 64 bytes.
 
+### Gráficos
+
+| Tarea | Gráfico |
+|-------|---------|
+| #31 FIFO | ![FIFO](graficos/tarea31_fifo.png) |
+| #32 Memoria compartida | ![SHM](graficos/tarea32_shm.png) |
+| #33 Comparación | ![Comparación](graficos/tarea33_comparacion.png) |
+| #34 Mecanismo | ![Mecanismo](graficos/tarea34_mecanismo.png) |
+
+Se regeneran con `python3 graficos/generar_graficos.py` (produce los SVG con los valores medidos; los PNG se obtienen abriéndolos con Chromium en modo *headless*).
+
 ## Explicación del fenómeno
 
 1. **Cambios de contexto usuario ↔ kernel.** En la FIFO, cada paquete de
