@@ -35,7 +35,8 @@ con la explicación de lo que se hizo.
 ├── 🎲 Clase_9/   # 09/09 · Simulación del ciclo de instrucción y Monopoly en hoja de cálculo
 ├── 🚀 Clase_10/  # 16/09 · Optimización en la jerarquía de memoria aplicada al juego con YOLO (caché, registros e ILP)
 ├── 🧊 Clase_11/  # 21/09 · Memoria virtual: llenar la RAM y forzar el uso de swap
-└── 🔥 Clase_12/  # 23/09 · Control de afinidad de CPU con hilos (pthread_setaffinity_np)
+├── 🔥 Clase_12/  # 23/09 · Control de afinidad de CPU con hilos (pthread_setaffinity_np)
+└── 🚌 Clase_13/  # 21/10 · Buses e IPC: FIFO vs memoria compartida con semáforos y batching
 ```
 
 ## 💖 Contenido por clase
@@ -54,6 +55,7 @@ con la explicación de lo que se hizo.
 | [Clase_10](Clase_10/) | 16/09/2026 | Optimización en la jerarquía de memoria aplicada al proyecto del juego con YOLO: líneas de caché de 64 B, registros de CPU y loop unrolling (ILP) | [#21](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/21) · [#22](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/22) · [#23](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/23) · [#24](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/24) | 🌷 En progreso |
 | [Clase_11](Clase_11/) | 21/09/2026 | Memoria virtual: programa en C/Python que llena la RAM en un bucle hasta forzar el uso de swap (`free`, `swapon`, `vmstat`, `/proc/meminfo`) | — | 🌷 En progreso |
 | [Clase_12](Clase_12/) | 23/09/2026 | Control de afinidad de CPU: un hilo por núcleo elegido fijado con `pthread_setaffinity_np` y estresado al ~100 % | — | 🌷 En progreso |
+| [Clase_13](Clase_13/) | 21/10/2026 | Optimización de buses de comunicación e IPC: productor–consumidor de 10 M de paquetes de 64 B con FIFO (`read`/`write`) vs memoria compartida POSIX (`mmap`), semáforos y batching; medición de PPS, MB/s y syscalls (`strace`) | [#31](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/31) · [#32](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/32) · [#33](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/33) · [#34](https://github.com/Luugallego17/Arquitectura-De-Computadoras-/issues/34) | 🌸 Terminado |
 
 🗝️ **Leyenda de estados:** 🌱 Pendiente · 🌷 En progreso · 🌸 Terminado
 
