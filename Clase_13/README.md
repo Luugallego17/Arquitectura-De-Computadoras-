@@ -251,6 +251,8 @@ Las salidas originales de las pruebas están sin editar en [`evidencias/`](evide
 | [`04_getrusage.txt`](evidencias/04_getrusage.txt) | Cambios de contexto y tiempo de usuario/kernel de `Prod_NO`, `Cons_NO` y `Cons_OPT`. |
 | [`05_compilacion.txt`](evidencias/05_compilacion.txt) | Compilación de los cuatro programas con `-Wall -Wextra -O3`, sin advertencias. |
 
+Capturas de terminal de esas salidas: [`evidencias/capturas/`](evidencias/capturas/).
+
 ### Gráficos
 
 | Tarea | Gráfico |
