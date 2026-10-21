@@ -1,0 +1,21 @@
+# strace -c de 200 000 paquetes (muestra): una syscall por paquete
+
+## Prod_NO
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+100.00    2.005394          10    200001           write
+  0.00    0.000045          15         3           close
+  0.00    0.000000           0         1           read
+  0.00    0.000000           0         3           fstat
+  0.00    0.000000           0         8           mmap
+  0.00    0.000000           0         3           mprotect
+
+## Cons_NO
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+ 99.99    1.973936           9    200001           read
+  0.00    0.000065          21         3           openat
+  0.00    0.000040          40         1           unlink
+  0.00    0.000015           5         3           close
+  0.00    0.000010          10         1           write
+  0.00    0.000000           0         3           fstat

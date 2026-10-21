@@ -1,0 +1,4 @@
+# getrusage: cambios de contexto voluntarios/involuntarios y tiempos de CPU
+./Prod_NO voluntarios: 5084 involuntarios: 8 user 0.66s sys 4.27s
+./Cons_NO voluntarios: 6256 involuntarios: 5 user 0.69s sys 4.21s
+./Cons_OPT voluntarios: 19763 involuntarios: 0 user 0.03s sys 0.20s
