@@ -1,0 +1,6 @@
+# Compilación con -Wall -Wextra -O3 (sin salida = sin advertencias)
+$ gcc -Wall -Wextra -O3 Prod_NO.c -o Prod_NO
+$ gcc -Wall -Wextra -O3 Cons_NO.c -o Cons_NO
+$ gcc -Wall -Wextra -O3 Prod_OPT.c -o Prod_OPT -lrt -lpthread
+$ gcc -Wall -Wextra -O3 Cons_OPT.c -o Cons_OPT -lrt -lpthread
+(fin)

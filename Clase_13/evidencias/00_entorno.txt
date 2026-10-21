@@ -1,0 +1,6 @@
+# Entorno de las pruebas
+Linux 6.18.44-fc-v140 x86_64
+Núcleos lógicos: 4
+gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+Model name:                              Intel(R) Xeon(R) Processor @ 2.10GHz
+MemTotal:       16477352 kB

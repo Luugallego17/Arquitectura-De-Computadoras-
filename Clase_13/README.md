@@ -238,6 +238,19 @@ son *más* en la optimizada (el consumidor se duerme una vez por lote
 porque el productor no se adelanta), pero cada uno ocurre por **500
 paquetes** y no por 64 bytes.
 
+### Evidencias
+
+Las salidas originales de las pruebas están sin editar en [`evidencias/`](evidencias/):
+
+| Archivo | Contenido |
+|---------|-----------|
+| [`00_entorno.txt`](evidencias/00_entorno.txt) | Kernel, compilador, CPU y RAM del equipo de prueba. |
+| [`01_ejecucion_3_repeticiones.txt`](evidencias/01_ejecucion_3_repeticiones.txt) | Salida completa de `bash ejecutar_pruebas.sh 3`: compilación y las tres repeticiones de ambas pruebas. |
+| [`02_strace_fifo.txt`](evidencias/02_strace_fifo.txt) | `strace -c` de la FIFO (muestra de 200 000 paquetes): una syscall por paquete. |
+| [`03_strace_shm.txt`](evidencias/03_strace_shm.txt) | `strace -f -c` de la versión optimizada con los 10 M de paquetes (≈ 22 000 `futex` por proceso). |
+| [`04_getrusage.txt`](evidencias/04_getrusage.txt) | Cambios de contexto y tiempo de usuario/kernel de `Prod_NO`, `Cons_NO` y `Cons_OPT`. |
+| [`05_compilacion.txt`](evidencias/05_compilacion.txt) | Compilación de los cuatro programas con `-Wall -Wextra -O3`, sin advertencias. |
+
 ### Gráficos
 
 | Tarea | Gráfico |

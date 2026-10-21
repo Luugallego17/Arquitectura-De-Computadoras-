@@ -1,0 +1,101 @@
+== Compilación ==
+OK (4 programas, sin advertencias)
+
+################ Repetición 1 de 3 ################
+---- Prueba 1: NO optimizada (FIFO) ----
+[Prod_NO] Esperando al consumidor...
+
+=== METRICAS PRODUCTOR NO OPTIMIZADO (Prod_NO) ===
+Paquetes enviados : 10000000
+Tiempo total     : 5.1248 segundos
+Velocidad (PPS) : 1951292 paquetes/seg
+Rendimiento      : 119.10 MB/s
+[Cons_NO] Conectando a FIFO...
+
+=== METRICAS CONSUMIDOR NO OPTIMIZADO (Cons_NO) ===
+Paquetes recibidos: 10000000
+Tiempo total     : 5.1250 segundos
+Velocidad (PPS) : 1951220 paquetes/seg
+Rendimiento      : 119.09 MB/s
+
+---- Prueba 2: OPTIMIZADA (memoria compartida + batching) ----
+[Prod_OPT] Iniciando transferencia optimizada (Zero-Copy Batching)...
+
+=== METRICAS PRODUCTOR OPTIMIZADO (Prod_OPT) ===
+Paquetes enviados : 10000000
+Tiempo total     : 0.5440 segundos
+Velocidad (PPS) : 18381601 paquetes/seg
+Rendimiento      : 1121.92 MB/s
+[Cons_OPT] Recibiendo datos optimizados...
+
+=== METRICAS CONSUMIDOR OPTIMIZADO (Cons_OPT) ===
+Paquetes recibidos: 10000000
+Tiempo total     : 0.4808 segundos
+Velocidad (PPS) : 20797094 paquetes/seg
+Rendimiento      : 1269.35 MB/s
+
+################ Repetición 2 de 3 ################
+---- Prueba 1: NO optimizada (FIFO) ----
+[Prod_NO] Esperando al consumidor...
+
+=== METRICAS PRODUCTOR NO OPTIMIZADO (Prod_NO) ===
+Paquetes enviados : 10000000
+Tiempo total     : 5.0889 segundos
+Velocidad (PPS) : 1965048 paquetes/seg
+Rendimiento      : 119.94 MB/s
+[Cons_NO] Conectando a FIFO...
+
+=== METRICAS CONSUMIDOR NO OPTIMIZADO (Cons_NO) ===
+Paquetes recibidos: 10000000
+Tiempo total     : 5.0889 segundos
+Velocidad (PPS) : 1965052 paquetes/seg
+Rendimiento      : 119.94 MB/s
+
+---- Prueba 2: OPTIMIZADA (memoria compartida + batching) ----
+[Prod_OPT] Iniciando transferencia optimizada (Zero-Copy Batching)...
+
+=== METRICAS PRODUCTOR OPTIMIZADO (Prod_OPT) ===
+Paquetes enviados : 10000000
+Tiempo total     : 0.5923 segundos
+Velocidad (PPS) : 16883696 paquetes/seg
+Rendimiento      : 1030.50 MB/s
+[Cons_OPT] Recibiendo datos optimizados...
+
+=== METRICAS CONSUMIDOR OPTIMIZADO (Cons_OPT) ===
+Paquetes recibidos: 10000000
+Tiempo total     : 0.5276 segundos
+Velocidad (PPS) : 18953338 paquetes/seg
+Rendimiento      : 1156.82 MB/s
+
+################ Repetición 3 de 3 ################
+---- Prueba 1: NO optimizada (FIFO) ----
+[Prod_NO] Esperando al consumidor...
+
+=== METRICAS PRODUCTOR NO OPTIMIZADO (Prod_NO) ===
+Paquetes enviados : 10000000
+Tiempo total     : 5.4118 segundos
+Velocidad (PPS) : 1847812 paquetes/seg
+Rendimiento      : 112.78 MB/s
+[Cons_NO] Conectando a FIFO...
+
+=== METRICAS CONSUMIDOR NO OPTIMIZADO (Cons_NO) ===
+Paquetes recibidos: 10000000
+Tiempo total     : 5.4118 segundos
+Velocidad (PPS) : 1847805 paquetes/seg
+Rendimiento      : 112.78 MB/s
+
+---- Prueba 2: OPTIMIZADA (memoria compartida + batching) ----
+[Prod_OPT] Iniciando transferencia optimizada (Zero-Copy Batching)...
+
+=== METRICAS PRODUCTOR OPTIMIZADO (Prod_OPT) ===
+Paquetes enviados : 10000000
+Tiempo total     : 0.5482 segundos
+Velocidad (PPS) : 18241539 paquetes/seg
+Rendimiento      : 1113.38 MB/s
+[Cons_OPT] Recibiendo datos optimizados...
+
+=== METRICAS CONSUMIDOR OPTIMIZADO (Cons_OPT) ===
+Paquetes recibidos: 10000000
+Tiempo total     : 0.4853 segundos
+Velocidad (PPS) : 20607031 paquetes/seg
+Rendimiento      : 1257.75 MB/s
