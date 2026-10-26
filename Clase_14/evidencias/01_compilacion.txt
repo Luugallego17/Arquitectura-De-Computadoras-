@@ -1,0 +1,6 @@
+# Compilacion con -std=c99 -Wall -Wextra -pedantic (sin salida = sin advertencias)
+$ gcc -std=c99 -Wall -Wextra -pedantic exp1_puerto_teclado.c -o exp1_puerto_teclado
+$ gcc -std=c99 -Wall -Wextra -pedantic exp2_cola_teclado.c -o exp2_cola_teclado
+$ gcc -std=c99 -Wall -Wextra -pedantic exp3_vram_monitor.c -o exp3_vram_monitor
+$ gcc -std=c99 -Wall -Wextra -pedantic reto_integrador_terminal.c -o reto_integrador_terminal
+(fin)

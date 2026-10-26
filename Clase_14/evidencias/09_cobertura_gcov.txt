@@ -1,0 +1,16 @@
+File 'exp1_puerto_teclado.c'
+Lines executed:85.14% of 74
+Branches executed:80.00% of 30
+Taken at least once:46.67% of 30
+File 'exp2_cola_teclado.c'
+Lines executed:81.00% of 100
+Branches executed:76.32% of 76
+Taken at least once:59.21% of 76
+File 'exp3_vram_monitor.c'
+Lines executed:84.04% of 94
+Branches executed:86.67% of 60
+Taken at least once:63.33% of 60
+File 'reto_integrador_terminal.c'
+Lines executed:84.28% of 159
+Branches executed:75.61% of 82
+Taken at least once:59.76% of 82

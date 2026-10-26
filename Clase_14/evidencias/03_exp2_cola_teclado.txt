@@ -1,0 +1,41 @@
+$ ./exp2_cola_teclado
+=== EXPERIMENTO 2: cola circular FIFO en RAM (8 bytes) ===
+
+Prueba 1: cola vacia
+  estado inicial
+    0x70..0x77 (buffer): 00(.) 00(.) 00(.) 00(.) 00(.) 00(.) 00(.) 00(.) 
+    HEAD(0x78)=0  TAIL(0x79)=0  COUNT(0x7A)=0
+  [OK] desencolar con la cola vacia devuelve false
+
+Prueba 2: llenar la cola con A..H (8 teclas)
+  cola llena
+    0x70..0x77 (buffer): 41(A) 42(B) 43(C) 44(D) 45(E) 46(F) 47(G) 48(H) 
+    HEAD(0x78)=0  TAIL(0x79)=0  COUNT(0x7A)=8
+  [OK] COUNT = 8
+  [OK] TAIL volvio a 0 (aritmetica modular)
+
+Prueba 3: Buffer Overflow al encolar la tecla numero 9
+  despues del intento de encolar 'I'
+    0x70..0x77 (buffer): 41(A) 42(B) 43(C) 44(D) 45(E) 46(F) 47(G) 48(H) 
+    HEAD(0x78)=0  TAIL(0x79)=0  COUNT(0x7A)=8
+  [OK] encolar con la cola llena devuelve false
+  [OK] COUNT sigue en 8 y no se piso ningun dato
+
+Prueba 4: orden FIFO al desencolar
+  desencoladas: ABCDEFGH
+  [OK] salen en el mismo orden: ABCDEFGH
+  [OK] COUNT = 0 y HEAD = TAIL
+
+Prueba 5: vuelta circular (wrap-around) de los punteros
+  HEAD en 5 y TAIL ya dio la vuelta
+    0x70..0x77 (buffer): 63(c) 64(d) 65(e) 66(f) 35(5) 36(6) 61(a) 62(b) 
+    HEAD(0x78)=5  TAIL(0x79)=4  COUNT(0x7A)=7
+  [OK] TAIL < HEAD (el puntero cruzo el final del buffer)
+  desencoladas: 6abcdef
+  [OK] el orden se conserva tras la vuelta: 6abcdef
+
+Prueba 6: la cola no toca nada fuera de 0x70..0x7A
+  [OK] el resto de la RAM conserva 0xEE
+
+Resultado: TODAS LAS PRUEBAS OK (0 fallos)
+codigo de salida: 0

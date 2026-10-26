@@ -1,0 +1,72 @@
+$ ./exp1_puerto_teclado -t
+TRAZA,paso,evento,address_bus,io_read,data_bus,reg_status
+TRAZA,0,reposo,0x00,0,0x00,0
+TRAZA,1,tecla_A,0x00,0,0x00,1
+TRAZA,2,IN_0x01,0x01,1,0x01,1
+TRAZA,3,IN_0x01,0x01,1,0x01,1
+TRAZA,4,IN_0x02,0x02,1,0x41,0
+TRAZA,5,IN_0x01,0x01,1,0x00,0
+
+$ ./exp2_cola_teclado -t
+TRAZA,paso,operacion,resultado,head,tail,count
+TRAZA,0,inicio,-,0,0,0
+TRAZA,1,enc_A,ok,0,1,1
+TRAZA,2,enc_B,ok,0,2,2
+TRAZA,3,enc_C,ok,0,3,3
+TRAZA,4,enc_D,ok,0,4,4
+TRAZA,5,enc_E,ok,0,5,5
+TRAZA,6,enc_F,ok,0,6,6
+TRAZA,7,enc_G,ok,0,7,7
+TRAZA,8,enc_H,ok,0,0,8
+TRAZA,9,enc_I,OVERFLOW,0,0,8
+TRAZA,10,enc_J,OVERFLOW,0,0,8
+TRAZA,11,des,ok,1,0,7
+TRAZA,12,des,ok,2,0,6
+TRAZA,13,des,ok,3,0,5
+TRAZA,14,des,ok,4,0,4
+TRAZA,15,des,ok,5,0,3
+TRAZA,16,enc_K,ok,5,1,4
+TRAZA,17,enc_L,ok,5,2,5
+TRAZA,18,enc_M,ok,5,3,6
+TRAZA,19,enc_N,ok,5,4,7
+TRAZA,20,des,ok,6,4,6
+TRAZA,21,des,ok,7,4,5
+TRAZA,22,des,ok,0,4,4
+TRAZA,23,des,ok,1,4,3
+TRAZA,24,des,ok,2,4,2
+TRAZA,25,des,ok,3,4,1
+TRAZA,26,des,ok,4,4,0
+TRAZA,27,des,VACIA,4,4,0
+TRAZA,28,des,VACIA,4,4,0
+
+$ ./exp3_vram_monitor -t
+VRAM,escrita,72,79,76,65,65,82,81,33,49,50,51,52,87,88,89,90
+VRAM,scroll1,65,82,81,33,49,50,51,52,87,88,89,90,32,32,32,32
+VRAM,scroll2,49,50,51,52,87,88,89,90,32,32,32,32,32,32,32,32
+VRAM,scroll3,87,88,89,90,32,32,32,32,32,32,32,32,32,32,32,32
+VRAM,scroll4,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32
+
+$ ./reto_integrador_terminal -t
+TRAZA,paso,tecla,cursor,pantalla
+TRAZA,0,inicio,240,"                "
+TRAZA,1,0x48,241,"H               "
+TRAZA,2,0x4F,242,"HO              "
+TRAZA,3,0x4C,243,"HOL             "
+TRAZA,4,0x41,244,"HOLA            "
+TRAZA,5,0x08,243,"HOL             "
+TRAZA,6,0x08,242,"HO              "
+TRAZA,7,0x55,243,"HOU             "
+TRAZA,8,0x4E,244,"HOUN            "
+TRAZA,9,0x41,245,"HOUNA           "
+TRAZA,10,0x7F,244,"HOUN            "
+TRAZA,11,0x4F,245,"HOUNO           "
+TRAZA,12,0x53,246,"HOUNOS          "
+TRAZA,13,0x08,245,"HOUNO           "
+TRAZA,14,0x08,244,"HOUN            "
+TRAZA,15,0x08,243,"HOU             "
+TRAZA,16,0x08,242,"HO              "
+TRAZA,17,0x08,241,"H               "
+TRAZA,18,0x08,240,"                "
+TRAZA,19,0x08,240,"                "
+TRAZA,20,0x08,240,"                "
+

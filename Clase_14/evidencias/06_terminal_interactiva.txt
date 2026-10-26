@@ -1,0 +1,86 @@
+$ printf 'HOLA<ANOS\nXY<<\n' | ./terminal -i
+Terminal interactiva. Escribe texto; usa '<' como Backspace; ENTER envia; Ctrl+D sale.
+  +----+
+  |    |
+  |    |
+  |    |
+  |    |
+  +----+  cursor=0xF0
+  +----+
+  |H   |
+  |    |
+  |    |
+  |    |
+  +----+  cursor=0xF1
+  +----+
+  |HO  |
+  |    |
+  |    |
+  |    |
+  +----+  cursor=0xF2
+  +----+
+  |HOL |
+  |    |
+  |    |
+  |    |
+  +----+  cursor=0xF3
+  +----+
+  |HOLA|
+  |    |
+  |    |
+  |    |
+  +----+  cursor=0xF4
+  +----+
+  |HOL |
+  |    |
+  |    |
+  |    |
+  +----+  cursor=0xF3
+  +----+
+  |HOLA|
+  |    |
+  |    |
+  |    |
+  +----+  cursor=0xF4
+  +----+
+  |HOLA|
+  |N   |
+  |    |
+  |    |
+  +----+  cursor=0xF5
+  +----+
+  |HOLA|
+  |NO  |
+  |    |
+  |    |
+  +----+  cursor=0xF6
+  +----+
+  |HOLA|
+  |NOS |
+  |    |
+  |    |
+  +----+  cursor=0xF7
+  +----+
+  |HOLA|
+  |NOSX|
+  |    |
+  |    |
+  +----+  cursor=0xF8
+  +----+
+  |HOLA|
+  |NOSX|
+  |Y   |
+  |    |
+  +----+  cursor=0xF9
+  +----+
+  |HOLA|
+  |NOSX|
+  |    |
+  |    |
+  +----+  cursor=0xF8
+  +----+
+  |HOLA|
+  |NOS |
+  |    |
+  |    |
+  +----+  cursor=0xF7

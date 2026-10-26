@@ -1,0 +1,8 @@
+# Entorno de las pruebas
+fecha    : 26/10/2026 14:43:06 UTC
+kernel   : Linux 6.18.44-fc-v153
+gcc      : gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+valgrind : valgrind-3.22.0
+gcov     : gcov (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+CPU      : Intel(R) Xeon(R) Processor @ 2.10GHz
+git      : fda0aa6

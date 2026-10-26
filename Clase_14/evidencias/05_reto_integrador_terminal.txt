@@ -1,0 +1,139 @@
+$ ./terminal
+=== RETO INTEGRADOR: terminal con Backspace ===
+
+Prueba 1: escribir "HOLA" (teclado -> puerto -> cola -> VRAM)
+  COUNT en la cola antes de procesar = 4
+  +----+
+  |H   |
+  |    |
+  |    |
+  |    |
+  +----+  cursor=0xF1
+  +----+
+  |HO  |
+  |    |
+  |    |
+  |    |
+  +----+  cursor=0xF2
+  +----+
+  |HOL |
+  |    |
+  |    |
+  |    |
+  +----+  cursor=0xF3
+  +----+
+  |HOLA|
+  |    |
+  |    |
+  |    |
+  +----+  cursor=0xF4
+  [OK] la fila 0 muestra HOLA
+  [OK] el cursor avanzo a 0xF4
+
+Prueba 2: Backspace (0x08) borra el ultimo caracter
+  +----+
+  |HOL |
+  |    |
+  |    |
+  |    |
+  +----+  cursor=0xF3
+  [OK] la fila 0 queda "HOL "
+  [OK] el cursor retrocedio a 0xF3
+
+Prueba 3: DEL (0x7F) tambien borra y se puede reescribir
+  +----+
+  |HO  |
+  |    |
+  |    |
+  |    |
+  +----+  cursor=0xF2
+  +----+
+  |HOA |
+  |    |
+  |    |
+  |    |
+  +----+  cursor=0xF3
+  +----+
+  |HOAB|
+  |    |
+  |    |
+  |    |
+  +----+  cursor=0xF4
+  [OK] la fila 0 queda "HOAB" (borro 'L', escribio 'A','B')
+
+Prueba 4: Backspace con la pantalla vacia no se sale de la VRAM
+  +----+
+  |    |
+  |    |
+  |    |
+  |    |
+  +----+  cursor=0xF0
+  +----+
+  |    |
+  |    |
+  |    |
+  |    |
+  +----+  cursor=0xF0
+  +----+
+  |    |
+  |    |
+  |    |
+  |    |
+  +----+  cursor=0xF0
+  [OK] el cursor sigue en 0xF0
+  [OK] 0xEF (fuera de la VRAM) no se modifico
+
+Prueba 5: pantalla llena (16 caracteres) y tecla extra
+  +----+
+  |ABCD|
+  |EFGH|
+  |IJKL|
+  |MNOP|
+  +----+  cursor=0x100
+  [OK] la ultima fila es MNOP
+  [OK] el cursor se detiene en 0x100 (no vuelve a 0x00)
+  [OK] la tecla 'Z' extra se descarta y no pisa la RAM de codigo
+
+Prueba 6: Backspace estando la pantalla llena
+  +----+
+  |ABCD|
+  |EFGH|
+  |IJKL|
+  |MNO |
+  +----+  cursor=0xFF
+  [OK] borra la 'P' y la fila 3 queda "MNO "
+
+Prueba 7: caracteres no imprimibles se ignoran
+  +----+
+  |A   |
+  |    |
+  |    |
+  |    |
+  +----+  cursor=0xF1
+  +----+
+  |A   |
+  |    |
+  |    |
+  |    |
+  +----+  cursor=0xF1
+  +----+
+  |A   |
+  |    |
+  |    |
+  |    |
+  +----+  cursor=0xF1
+  +----+
+  |AB  |
+  |    |
+  |    |
+  |    |
+  +----+  cursor=0xF2
+  [OK] solo se dibujan A y B
+
+Prueba 8: rafaga de 10 teclas sin procesar desborda la cola de 8
+  encoladas=8, perdidas por overflow=2
+  [OK] se perdieron exactamente 2 teclas
+  [OK] se dibujaron las primeras 8: 0123 4567
+
+Resultado: TODAS LAS PRUEBAS OK (0 fallos)
+codigo de salida: 0

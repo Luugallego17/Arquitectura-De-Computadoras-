@@ -1,0 +1,33 @@
+$ ./exp1_puerto_teclado
+=== EXPERIMENTO 1: lectura por puerto (IO_READ + handshake) ===
+
+Prueba 1: sin tecla presionada
+  IN 0x01 -> status = 0
+  [OK] status = 0 (no hay tecla lista)
+
+Prueba 2: se presiona 'A' (0x41)
+  IN 0x01 -> status = 1
+  [OK] status = 1 (tecla lista)
+
+Prueba 3: leer el status no limpia la bandera
+  IN 0x01 (segunda vez) -> status = 1
+  [OK] status sigue en 1 tras releer el puerto 0x01
+
+Prueba 4: leer el puerto de datos entrega el ASCII y limpia el status
+  IN 0x02 -> dato = 0x41 ('A')
+  [OK] dato = 0x41 ('A')
+  IN 0x01 -> status = 0
+  [OK] status = 0 (handshake automatico)
+
+Prueba 5: tres teclas seguidas con sondeo (polling)
+  tecla 1: leida 'O' (status=0 tras leer)
+  tecla 2: leida 'K' (status=0 tras leer)
+  tecla 3: leida '!' (status=0 tras leer)
+  [OK] se leyo "OK!" completo y en orden
+
+Prueba 6: las senales del bus vuelven a reposo despues de cada IN
+  [OK] io_read = false tras la instruccion IN
+  [OK] mem_read = false durante E/S aislada
+
+Resultado: TODAS LAS PRUEBAS OK (0 fallos)
+codigo de salida: 0

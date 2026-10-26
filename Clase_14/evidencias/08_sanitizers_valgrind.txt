@@ -1,0 +1,29 @@
+$ gcc -g -fsanitize=address,undefined -fno-omit-frame-pointer exp1_puerto_teclado.c && ./a.out
+  codigo de salida: 0 | errores ASan/UBSan: 0 | pruebas: Resultado: TODAS LAS PRUEBAS OK (0 fallos)
+$ gcc -g -fsanitize=address,undefined -fno-omit-frame-pointer exp2_cola_teclado.c && ./a.out
+  codigo de salida: 0 | errores ASan/UBSan: 0 | pruebas: Resultado: TODAS LAS PRUEBAS OK (0 fallos)
+$ gcc -g -fsanitize=address,undefined -fno-omit-frame-pointer exp3_vram_monitor.c && ./a.out
+  codigo de salida: 0 | errores ASan/UBSan: 0 | pruebas: Resultado: TODAS LAS PRUEBAS OK (0 fallos)
+$ gcc -g -fsanitize=address,undefined -fno-omit-frame-pointer reto_integrador_terminal.c && ./a.out
+  codigo de salida: 0 | errores ASan/UBSan: 0 | pruebas: Resultado: TODAS LAS PRUEBAS OK (0 fallos)
+
+$ valgrind --leak-check=full --error-exitcode=9 ./exp1_puerto_teclado
+  codigo de salida: 0
+    total heap usage: 1 allocs, 1 frees, 4,096 bytes allocated
+  All heap blocks were freed -- no leaks are possible
+  ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+$ valgrind --leak-check=full --error-exitcode=9 ./exp2_cola_teclado
+  codigo de salida: 0
+    total heap usage: 1 allocs, 1 frees, 4,096 bytes allocated
+  All heap blocks were freed -- no leaks are possible
+  ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+$ valgrind --leak-check=full --error-exitcode=9 ./exp3_vram_monitor
+  codigo de salida: 0
+    total heap usage: 1 allocs, 1 frees, 4,096 bytes allocated
+  All heap blocks were freed -- no leaks are possible
+  ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+$ valgrind --leak-check=full --error-exitcode=9 ./reto_integrador_terminal
+  codigo de salida: 0
+    total heap usage: 1 allocs, 1 frees, 4,096 bytes allocated
+  All heap blocks were freed -- no leaks are possible
+  ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

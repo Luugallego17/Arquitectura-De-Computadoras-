@@ -1,0 +1,15 @@
+$ gcc -std=c99 -Wall -Wextra -pedantic demo_cursor_uint8.c -o demo_cursor_uint8
+demo_cursor_uint8.c: In function 'main':
+demo_cursor_uint8.c:30:21: warning: comparison is always true due to limited range of data type [-Wtype-limits]
+   30 |         if (cursor8 <= 0xFF) { ram_literal[cursor8] = (uint8_t)txt[i]; cursor8++; }
+      |                     ^~
+$ ./demo_cursor_uint8
+Se escriben 19 caracteres en una VRAM de 16 celdas (0xF0..0xFF)
+
+                        literal(uint8_t)   corregida(uint16_t)
+cursor final           : 0x03               0x100
+RAM[0x00] (codigo)     : 0x51 ('Q')          0x00
+RAM[0x01] (codigo)     : 0x52 ('R')          0x00
+RAM[0x02] (codigo)     : 0x53 ('S')          0x00
+
+Resultado: la version literal corrompe la RAM de codigo (CONFIRMADO); la corregida no (CONFIRMADO).

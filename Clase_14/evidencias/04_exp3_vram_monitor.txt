@@ -1,0 +1,59 @@
+$ ./exp3_vram_monitor
+=== EXPERIMENTO 3: VRAM 4x4 (0xF0..0xFF) y scroll ===
+
+Prueba 1: pantalla limpia
+  monitor vacio
+  +----+
+  |    |  0xF0..0xF3
+  |    |  0xF4..0xF7
+  |    |  0xF8..0xFB
+  |    |  0xFC..0xFF
+  +----+
+  [OK] toda la VRAM vale 0x20 (espacio)
+
+Prueba 2: escribir en coordenadas (fila, columna)
+  monitor con 4 filas
+  +----+
+  |HOLA|  0xF0..0xF3
+  |ARQ!|  0xF4..0xF7
+  |1234|  0xF8..0xFB
+  |WXYZ|  0xFC..0xFF
+  +----+
+  [OK] (2,3) esta en la direccion 0xFB
+  [OK] (0,0) esta en 0xF0 y (3,3) en 0xFF
+
+Prueba 3: leer de vuelta una celda
+  vram_leer(1,2) -> 'Q'
+  [OK] se lee 'Q' en (1,2)
+
+Prueba 4: coordenadas fuera de rango se rechazan sin tocar la RAM
+  [OK] fila 4 rechazada
+  [OK] columna 4 rechazada
+  [OK] lectura fuera de rango rechazada
+  [OK] 0xFF y 0x00 no cambiaron
+
+Prueba 5: scroll vertical hacia arriba
+  despues de un scroll
+  +----+
+  |ARQ!|  0xF0..0xF3
+  |1234|  0xF4..0xF7
+  |WXYZ|  0xF8..0xFB
+  |    |  0xFC..0xFF
+  +----+
+  [OK] fila 0 = antigua fila 1 (ARQ!)
+  [OK] fila 1 = antigua fila 2 (1234)
+  [OK] fila 2 = antigua fila 3 (WXYZ)
+  [OK] fila 3 queda en blanco (0x20)
+
+Prueba 6: cuatro scrolls borran toda la pantalla
+  despues de 4 scrolls en total
+  +----+
+  |    |  0xF0..0xF3
+  |    |  0xF4..0xF7
+  |    |  0xF8..0xFB
+  |    |  0xFC..0xFF
+  +----+
+  [OK] la VRAM quedo completamente en blanco
+
+Resultado: TODAS LAS PRUEBAS OK (0 fallos)
+codigo de salida: 0
