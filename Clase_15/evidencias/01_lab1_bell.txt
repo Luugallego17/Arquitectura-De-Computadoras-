@@ -1,0 +1,39 @@
+$ python3 lab1_hola_mundo.py
+Estado de Bell |Φ⁺⟩ = (|00⟩ + |11⟩)/√2
+CIRCUITO CUÁNTICO:
+     ┌───┐     ┌─┐   
+q_0: ┤ H ├──■──┤M├───
+     └───┘┌─┴─┐└╥┘┌─┐
+q_1: ─────┤ X ├─╫─┤M├
+          └───┘ ║ └╥┘
+c: 2/═══════════╩══╩═
+                0  1 
+
+RESULTADOS DE LA MEDICIÓN (10000 disparos):
+Estado |00⟩: 4932 ocurrencias (49.32%)
+Estado |01⟩: 0 ocurrencias (0.00%)
+Estado |10⟩: 0 ocurrencias (0.00%)
+Estado |11⟩: 5068 ocurrencias (50.68%)
+[OK] solo |00⟩ y |11⟩, cerca del 50/50, y el resto en cero
+codigo de salida: 0
+
+$ python3 lab1_hola_mundo.py --psi-plus
+Reto práctico 1: Estado de Bell |Ψ⁺⟩ = (|01⟩ + |10⟩)/√2
+Compuerta Pauli intercalada: X (Pauli-X) sobre el cúbit q1,
+después del CNOT. X cambia |0⟩ por |1⟩ en ese cúbit y |Φ⁺⟩ pasa a |Ψ⁺⟩.
+CIRCUITO CUÁNTICO:
+     ┌───┐          ┌─┐   
+q_0: ┤ H ├──■───────┤M├───
+     └───┘┌─┴─┐┌───┐└╥┘┌─┐
+q_1: ─────┤ X ├┤ X ├─╫─┤M├
+          └───┘└───┘ ║ └╥┘
+c: 2/════════════════╩══╩═
+                     0  1 
+
+RESULTADOS DE LA MEDICIÓN (10000 disparos):
+Estado |00⟩: 0 ocurrencias (0.00%)
+Estado |01⟩: 5068 ocurrencias (50.68%)
+Estado |10⟩: 4932 ocurrencias (49.32%)
+Estado |11⟩: 0 ocurrencias (0.00%)
+[OK] solo |01⟩ y |10⟩, cerca del 50/50, y el resto en cero
+codigo de salida: 0

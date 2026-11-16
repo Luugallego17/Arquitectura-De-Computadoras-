@@ -1,0 +1,60 @@
+$ python3 lab3_algoritmo_deutsch.py
+ALGORITMO DE DEUTSCH (ancilla en |−⟩, phase kickback activo)
+10000 disparos por oráculo. Una consulta decide constante o balanceada.
+
+CIRCUITO CUÁNTICO (constante_0):
+     ┌───┐┌───┐┌─┐
+q_0: ┤ H ├┤ H ├┤M├
+     ├───┤├───┤└╥┘
+q_1: ┤ X ├┤ H ├─╫─
+     └───┘└───┘ ║ 
+c: 1/═══════════╩═
+                0 
+Oráculo: constante_0            | Medición q0: '0' -> Función CONSTANTE | 10000/10000
+  [OK] el bit coincide con la guía y salió en los 10000 disparos
+
+CIRCUITO CUÁNTICO (constante_1):
+     ┌───┐┌───┐     ┌─┐
+q_0: ┤ H ├┤ H ├─────┤M├
+     ├───┤├───┤┌───┐└╥┘
+q_1: ┤ X ├┤ H ├┤ X ├─╫─
+     └───┘└───┘└───┘ ║ 
+c: 1/════════════════╩═
+                     0 
+Oráculo: constante_1            | Medición q0: '0' -> Función CONSTANTE | 10000/10000
+  [OK] el bit coincide con la guía y salió en los 10000 disparos
+
+CIRCUITO CUÁNTICO (balanceada_identidad):
+     ┌───┐          ┌───┐┌─┐
+q_0: ┤ H ├───────■──┤ H ├┤M├
+     ├───┤┌───┐┌─┴─┐└───┘└╥┘
+q_1: ┤ X ├┤ H ├┤ X ├──────╫─
+     └───┘└───┘└───┘      ║ 
+c: 1/═════════════════════╩═
+                          0 
+Oráculo: balanceada_identidad   | Medición q0: '1' -> Función BALANCEADA | 10000/10000
+  [OK] el bit coincide con la guía y salió en los 10000 disparos
+
+CIRCUITO CUÁNTICO (balanceada_inversa):
+     ┌───┐┌───┐     ┌───┐┌───┐┌─┐
+q_0: ┤ H ├┤ X ├──■──┤ X ├┤ H ├┤M├
+     ├───┤├───┤┌─┴─┐└───┘└───┘└╥┘
+q_1: ┤ X ├┤ H ├┤ X ├───────────╫─
+     └───┘└───┘└───┘           ║ 
+c: 1/══════════════════════════╩═
+                               0 
+Oráculo: balanceada_inversa     | Medición q0: '1' -> Función BALANCEADA | 10000/10000
+  [OK] el bit coincide con la guía y salió en los 10000 disparos
+
+RETO PRÁCTICO 2: sin la compuerta X sobre la ancilla q1
+q1 queda en |+⟩. U_f no pega el signo (−1)^f(x) y el segundo
+Hadamard devuelve q0 a |0⟩ para las cuatro funciones.
+Oráculo: constante_0            | Medición q0: '0' -> Función CONSTANTE | 10000/10000
+  [OK] sin phase kickback la medición es '0' (el algoritmo no distingue)
+Oráculo: constante_1            | Medición q0: '0' -> Función CONSTANTE | 10000/10000
+  [OK] sin phase kickback la medición es '0' (el algoritmo no distingue)
+Oráculo: balanceada_identidad   | Medición q0: '0' -> Función CONSTANTE | 10000/10000
+  [OK] sin phase kickback la medición es '0' (el algoritmo no distingue)
+Oráculo: balanceada_inversa     | Medición q0: '0' -> Función CONSTANTE | 10000/10000
+  [OK] sin phase kickback la medición es '0' (el algoritmo no distingue)
+codigo de salida: 0
