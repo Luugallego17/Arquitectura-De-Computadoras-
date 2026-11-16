@@ -36,6 +36,9 @@ Clase_7/datos.bin
 # Python
 __pycache__/
 *.pyc
+# Entornos virtuales (PEP 668). El .venv de Clase_15 no se sube.
+.venv/
+venv/
 
 # Archivos temporales del editor y del sistema
 *~

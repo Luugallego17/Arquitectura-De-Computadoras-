@@ -1,0 +1,7 @@
+# Clase 15 — laboratorio de Qiskit (guía de Ubuntu).
+# `pip install qiskit` sin tope instala hoy la serie 2.x. La guía pide
+# Qiskit 1.x + Aer, así que las versiones quedan fijadas en esa línea.
+qiskit==1.4.6
+qiskit-aer==0.17.2
+matplotlib==3.11.2
+pylatexenc==2.11
