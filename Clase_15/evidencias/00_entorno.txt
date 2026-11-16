@@ -1,0 +1,16 @@
+# Entorno de las pruebas
+fecha      : 16/11/2026 15:48:06 UTC
+kernel     : Linux 6.12.113+
+python     : Python 3.12.3
+venv       : /workspace/Clase_15/.venv
+CPU        : Intel(R) Xeon(R) Processor
+git        : c45c74c
+
+$ python3 -c "import qiskit, qiskit_aer; print('Qiskit Core:', qiskit.__version__); print('Aer Simulator OK')"
+Qiskit Core: 1.4.6
+Aer Simulator OK
+
+$ python3 -c "import qiskit_aer, matplotlib, pylatexenc; print('qiskit-aer', qiskit_aer.__version__); print('matplotlib', matplotlib.__version__); print('pylatexenc', pylatexenc.__version__)"
+qiskit-aer 0.17.2
+matplotlib 3.11.2
+pylatexenc 2.11

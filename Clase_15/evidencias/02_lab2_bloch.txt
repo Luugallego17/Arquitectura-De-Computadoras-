@@ -1,0 +1,48 @@
+$ python3 lab2_rotaciones_bloch.py
+ROTACIONES Ry(θ) EN LA ESFERA DE BLOCH
+10000 disparos por ángulo. Teórico: P(|0⟩) = cos²(θ/2), P(|1⟩) = sin²(θ/2).
+
+Polo Norte (theta = 0)
+CIRCUITO CUÁNTICO:
+     ┌───────┐┌─┐
+  q: ┤ Ry(0) ├┤M├
+     └───────┘└╥┘
+c: 1/══════════╩═
+               0 
+Polo Norte (theta = 0)              -> P(|0⟩): 100.0% | P(|1⟩):   0.0% | teórico P(|0⟩): 100.0% | P(|1⟩):   0.0%
+  cuentas: |0⟩ = 10000, |1⟩ = 0
+  [OK] a menos de 2 puntos porcentuales del valor teórico
+
+Ángulo 45° (theta = pi/4)
+CIRCUITO CUÁNTICO:
+     ┌─────────┐┌─┐
+  q: ┤ Ry(π/4) ├┤M├
+     └─────────┘└╥┘
+c: 1/════════════╩═
+                 0 
+Ángulo 45° (theta = pi/4)           -> P(|0⟩):  85.5% | P(|1⟩):  14.4% | teórico P(|0⟩):  85.4% | P(|1⟩):  14.6%
+  cuentas: |0⟩ = 8555, |1⟩ = 1445
+  [OK] a menos de 2 puntos porcentuales del valor teórico
+
+Ecuador (theta = pi/2, Estado |+>)
+CIRCUITO CUÁNTICO:
+     ┌─────────┐┌─┐
+  q: ┤ Ry(π/2) ├┤M├
+     └─────────┘└╥┘
+c: 1/════════════╩═
+                 0 
+Ecuador (theta = pi/2, Estado |+>)  -> P(|0⟩):  49.2% | P(|1⟩):  50.8% | teórico P(|0⟩):  50.0% | P(|1⟩):  50.0%
+  cuentas: |0⟩ = 4921, |1⟩ = 5079
+  [OK] a menos de 2 puntos porcentuales del valor teórico
+
+Polo Sur (theta = pi, Estado |1>)
+CIRCUITO CUÁNTICO:
+     ┌───────┐┌─┐
+  q: ┤ Ry(π) ├┤M├
+     └───────┘└╥┘
+c: 1/══════════╩═
+               0 
+Polo Sur (theta = pi, Estado |1>)   -> P(|0⟩):   0.0% | P(|1⟩): 100.0% | teórico P(|0⟩):   0.0% | P(|1⟩): 100.0%
+  cuentas: |0⟩ = 0, |1⟩ = 10000
+  [OK] a menos de 2 puntos porcentuales del valor teórico
+codigo de salida: 0
