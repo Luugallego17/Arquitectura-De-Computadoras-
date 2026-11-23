@@ -29,6 +29,7 @@ en el marco del curso *Computación cuántica full-stack*:
 | [`requirements.txt`](requirements.txt) | Qiskit 1.4.6, Qiskit Aer 0.17.2, matplotlib 3.11.2 y pylatexenc 2.11. |
 | [`ejecutar_pruebas.sh`](ejecutar_pruebas.sh) | Corre los cuatro scripts con el `.venv` y regenera `evidencias/` (`bash ejecutar_pruebas.sh`). |
 | [`graficos/`](graficos/) | `generar_graficos.py` dibuja SVG y PNG desde los conteos reales de Aer. `generar_capturas.py` arma las capturas de terminal. |
+| [`diapositivas/`](diapositivas/) | `clase15_investigaciones.pptx`: siete diapositivas. La tercera cita investigaciones internacionales, nacionales y locales. `generar_diapositivas.py` las reconstruye. |
 | [`evidencias/`](evidencias/) | Salidas originales de esta ejecución y capturas. |
 
 ## Conceptos
@@ -75,6 +76,39 @@ en el marco del curso *Computación cuántica full-stack*:
   transición \|0⟩↔\|1⟩ de las siguientes. La lectura es dispersiva; la
   señal sube por un TWPA (15 mK) y un HEMT (4 K) hasta el ADC. Esta
   práctica corre en el simulador ideal Aer, así que no aparecen T₁ ni T₂.
+
+## Investigaciones de referencia
+
+Las diapositivas están en
+[`diapositivas/clase15_investigaciones.pptx`](diapositivas/clase15_investigaciones.pptx).
+La tercera nombra, en tres columnas, un trabajo internacional, uno nacional
+y uno local. Se regeneran con `python3 diapositivas/generar_diapositivas.py`.
+
+- **Internacional.** Son los protocolos que el código de la guía implementa.
+  Deutsch (1985), *Proceedings of the Royal Society A*, 400, 97-117, es el
+  lab 3. Bennett, Brassard, Crépeau, Jozsa, Peres y Wootters (1993),
+  *Physical Review Letters*, 70, 1895-1899, es el lab 4, y el artículo ya
+  dice que Bob necesita el mensaje clásico. Bell (1964), *Physics*, 1,
+  195-200, y Ekert (1991), *Physical Review Letters*, 67, 661-663, son el
+  recurso de \|Φ⁺⟩ y de la criptografía E91. Wootters y Zurek (1982),
+  *Nature*, 299, 802-803, es la no-clonación. Koch y otros (2007),
+  *Physical Review A*, 76, 042319, es el Transmon del módulo de hardware.
+- **Nacional.** Bacarreza, Farnsworth, Makarovskiy, Wallner, Hicks,
+  Sempere-Llagostera, Price, Francis-Jones y Clements (2025), *Quantum
+  latent distributions in deep generative models*, arXiv:2508.19857.
+  Omar Bacarreza es investigador boliviano y primer autor. El procesador
+  es fotónico y está en ORCA Computing, en Londres: el paper no se midió
+  en una universidad de Bolivia. En mayo de 2026 dio una master class en
+  Unifranz; eso es divulgación en el país, no un segundo experimento.
+- **Local (La Paz).** Calle García y Rivera Bretel (2018), *Revista
+  Boliviana de Física*, 33, 3-12, Instituto de Investigaciones Físicas de
+  la UMSA, calle 27 de Cota Cota. Miden con Monte Carlo la eficiencia de
+  disparo del arreglo ALPACA, previsto en el cerro Estuquería, junto a
+  Chacaltaya. El 16 de agosto de 2019 la UMSA tuvo en el Paraninfo la
+  conferencia de Eduardo Sáenz de Cabezón. CIDIMEC, de esta facultad
+  (Resolución Rectoral 017/2017), publica cómputo de alto rendimiento y
+  co-diseño software-hardware. En La Paz no hay un criostato de cúbits:
+  la referencia local es de detectores y de arquitectura de computadoras.
 
 ## Cómo crear el .venv y ejecutar
 
